@@ -1,0 +1,11 @@
+---
+- sender: 'Alice'
+  receiver: 'Bob'
+  sender_sig: 'Alice_sig'
+  receiver_sig: 'Bob_sig'
+  content: 'Hello'
+- sender: 'Alice'
+  receiver: 'Emily'
+  sender_sig: 'Alice_sig'
+  receiver_sig: 'Emily_sig'
+  content: 'Hello World'
