@@ -19,18 +19,18 @@ module AIS
       @content      = new_receipt['content']
     end
 
-    attr_reader :id, :filename, :description, :content
+    attr_reader :id, :sender, :receiver, :sender_sig, :receiver_sig, :content
 
     def to_json(options = {})
       JSON(
         {
           type: 'receipt',
-          id:,
-          sender:,
-          receiver:,
-          sender_sig:,
-          receiver_sig:,
-          content:,
+          id:id,
+          sender:sender,
+          receiver:receiver,
+          sender_sig:sender_sig,
+          receiver_sig:receiver_sig,
+          content:content
         },
         options
       )
