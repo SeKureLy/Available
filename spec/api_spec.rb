@@ -38,7 +38,7 @@ describe 'Test AIS Web API' do
 
     it 'HAPPY: should be able to get details of a single receipt' do
       AIS::Receipt.new(DATA[1]).save
-      id = Dir.glob('app/db/store/*.txt').first.split(%r{[/\.]})[3]
+      id = Dir.glob('app/db/store/*.txt').first.split(%r{[/.]})[3]
 
       get "/api/v1/receipts/#{id}"
       result = JSON.parse last_response.body
