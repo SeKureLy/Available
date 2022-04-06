@@ -6,7 +6,7 @@ require 'json'
 require_relative '../models/receipt'
 
 module AIS
-  # Web controller for Credence API
+  # Web controller for AIS API
   class Api < Roda
     plugin :environments
     plugin :halt
@@ -19,7 +19,7 @@ module AIS
       response['Content-Type'] = 'application/json'
 
       routing.root do
-        { message: 'CredenceAPI up at /api/v1' }.to_json
+        { message: 'AIS_API up at /api/v1' }.to_json
       end
 
       routing.on 'api' do
