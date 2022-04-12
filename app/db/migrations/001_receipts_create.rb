@@ -5,7 +5,7 @@ require 'sequel'
 Sequel.migration do
     change do
         create_table(:receipts) do
-            primary_key:id
+            primary_key :id
 
             String :sender
             String :receiver
