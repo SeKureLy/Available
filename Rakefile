@@ -40,7 +40,7 @@ task :console => :print_env do
 end
 
 namespace :db do
-  require_relative 'config/environments.rb' # load config info
+  require_relative 'config/environments' # load config info
   require 'sequel'
 
   Sequel.extension :migration

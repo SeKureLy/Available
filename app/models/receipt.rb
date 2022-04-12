@@ -13,22 +13,14 @@ module AIS
 
     def to_json(options = {})
       JSON(
-        { 
-          data: {
-            type: 'receipt',
-            attributes:{
-              id:,
-              sender:,
-              receiver:,
-              sender_sig:,
-              receiver_sig:,
-              is_money:
-            }
-          },
-          included: {
-            exchange:
+        { data: {
+          type: 'receipt',
+          attributes: {
+            id:, sender:, receiver:, sender_sig:, receiver_sig:, is_money:
           }
-        }, options
+        }, included: {
+          exchange:
+        } }, options
       )
     end
   end

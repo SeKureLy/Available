@@ -3,19 +3,19 @@
 require 'sequel'
 
 Sequel.migration do
-    change do
-        create_table(:exchanges) do
-            primary_key :id
-            
-            String :seller
-            String :buyer
-            String :item
-            Integer :amount
+  change do
+    create_table(:exchanges) do
+      primary_key :id
 
-            DateTime :created_at
-            DateTime :updated_at
+      String :seller
+      String :buyer
+      String :item
+      Integer :amount
 
-            # unique [:id, :receipt_id]
-        end
+      DateTime :created_at
+      DateTime :updated_at
+
+      # unique [:id, :receipt_id]
     end
+  end
 end

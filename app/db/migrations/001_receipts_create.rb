@@ -3,19 +3,19 @@
 require 'sequel'
 
 Sequel.migration do
-    change do
-        create_table(:receipts) do
-            primary_key :id
-            foreign_key :exchange_id, table: :exchanges
+  change do
+    create_table(:receipts) do
+      primary_key :id
+      foreign_key :exchange_id, table: :exchanges
 
-            String :sender
-            String :sender_sig
-            String :receiver
-            String :receiver_sig
-            Boolean :is_money
+      String :sender
+      String :sender_sig
+      String :receiver
+      String :receiver_sig
+      Boolean :is_money
 
-            DateTime :created_at
-            DateTime :updated_at
-        end
+      DateTime :created_at
+      DateTime :updated_at
     end
+  end
 end

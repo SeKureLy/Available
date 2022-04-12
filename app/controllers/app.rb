@@ -36,7 +36,7 @@ module AIS
                 output = { data: Receipt.where(exchange_id: exc_id).all }
                 JSON.pretty_generate(output)
               rescue StandardError
-                routing.halt 404, { message: 'Could not find receipts'}.to_json
+                routing.halt 404, { message: 'Could not find receipts' }.to_json
               end
 
               # POST api/v1/exchanges/[exc_id]/receipts
@@ -79,6 +79,7 @@ module AIS
             new_data = JSON.parse(routing.body.read)
             new_exc = Exchange.new(new_data)
             raise('Could not save exchange') unless new_exc.save
+
             response.status = 201
             response['Location'] = "#{@exc_route}/#{new_exc.id}"
             { message: 'Exchange saved', data: new_exc }.to_json
