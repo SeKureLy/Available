@@ -14,8 +14,6 @@ Sequel.migration do
 
       DateTime :created_at
       DateTime :updated_at
-
-      # unique [:id, :receipt_id]
     end
   end
 end
