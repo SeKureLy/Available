@@ -8,7 +8,6 @@ module AIS
   # Configuration for the API
   class Api < Roda
     plugin :environments
-
     # load config secrets into local environment variables (ENV)
     Figaro.application = Figaro::Application.new(
       environment: environment, # rubocop:disable Style/HashSyntax
@@ -18,7 +17,6 @@ module AIS
 
     # Make the environment variables accessible to other classes
     def self.config = Figaro.env
-
     # Connect and make the database accessible to other classes
     db_url = ENV.delete('DB_FILENAME')
     DB = Sequel.connect("#{db_url}?encoding=utf8")
