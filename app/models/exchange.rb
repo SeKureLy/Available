@@ -12,12 +12,17 @@ module AIS
 
     def to_json(options = {})
       JSON(
-        { type: 'exchange',
-          id: id,
-          seller: seller,
-          buyer: buyer,
-          item: item,
-          amount: amount
+        { 
+          data: {
+            type: 'exchange',
+            attributes: {
+              id:,
+              seller:,
+              buyer:,
+              item:,
+              amount:
+            }
+          }
         }, options
       )
     end
