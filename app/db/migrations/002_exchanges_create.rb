@@ -6,9 +6,12 @@ Sequel.migration do
     change do
         create_table(:exchanges) do
             primary_key :id
-            # foreign_key :receipt_id
-            Integer :r1
-            Integer :r2
+            
+            String :seller
+            String :buyer
+            String :item
+            Integer :amount
+
             DateTime :created_at
             DateTime :updated_at
 

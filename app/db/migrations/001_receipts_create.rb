@@ -9,10 +9,10 @@ Sequel.migration do
             foreign_key :exchange_id, table: :exchanges
 
             String :sender
-            String :receiver
             String :sender_sig
+            String :receiver
             String :receiver_sig
-            String :content
+            Boolean :IsMoney
 
             DateTime :created_at
             DateTime :updated_at
