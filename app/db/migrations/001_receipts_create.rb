@@ -12,7 +12,7 @@ Sequel.migration do
             String :sender_sig
             String :receiver
             String :receiver_sig
-            Boolean :IsMoney
+            Boolean :is_money
 
             DateTime :created_at
             DateTime :updated_at

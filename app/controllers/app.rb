@@ -3,7 +3,6 @@
 require 'roda'
 require 'json'
 
-require_relative '../models/receipt'
 
 module AIS
   # Web controller for AIS API
@@ -61,7 +60,7 @@ module AIS
             end
             # GET api/v1/exchanges/[exc_id]
             routing.get do
-              exc = Exchange.first(id: exc_id)
+              exc = Exchange.first
               exc ? exc.to_json : raise('Exchange not found')
             rescue StandardError => e
               routing.halt 404, { message: e.message }.to_json

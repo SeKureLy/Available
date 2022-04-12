@@ -19,7 +19,7 @@ module AIS
           receiver: receiver,
           sender_sig: sender_sig,
           receiver_sig: receiver_sig,
-          content: content }, options
+          is_money: is_money }, options
       )
     end
   end

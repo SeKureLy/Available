@@ -14,7 +14,10 @@ module AIS
       JSON(
         { type: 'exchange',
           id: id,
-          receipt_id: receipt_id
+          seller: seller,
+          buyer: buyer,
+          item: item,
+          amount: amount
         }, options
       )
     end
