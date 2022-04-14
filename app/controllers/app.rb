@@ -18,7 +18,7 @@ module AIS
       @api_root = 'api/v1'
       routing.on @api_root do
         routing.on 'exchanges' do
-          @exc_route = "#{@api_root}/receipts"
+          @exc_route = "#{@api_root}/exchanges"
 
           routing.on String do |exc_id|
             routing.on 'receipts' do
