@@ -40,11 +40,17 @@ task :console => :print_env do
 end
 
 namespace :db do
-  require_relative 'config/environments' # load config info
-  require 'sequel'
+  task :load do
+    require_app(nil) # load nothing by default
+    require 'sequel'
 
-  Sequel.extension :migration
-  app = AIS::Api
+    Sequel.extension :migration
+    app = AIS::Api
+  end
+
+  task :load_models do
+    require_app('models')
+  end
 
   desc 'Run migrations'
   task :migrate => :print_env do
@@ -53,9 +59,10 @@ namespace :db do
   end
 
   desc 'Delete database'
-  task :delete do
-    app.DB[:documents].delete
-    app.DB[:projects].delete
+  task :delete => :load_models do
+    # app.DB[:documents].delete
+    # app.DB[:projects].delete
+    AIS::Receipt.dataset.destroy
   end
 
   desc 'Delete dev or test database file'
