@@ -56,7 +56,7 @@ describe 'Test Receipt Handling' do
 
     req_header = { 'CONTENT_TYPE' => 'application/json' }
     post "api/v1/exchanges/#{exchange.id}/receipts",
-        receipt_data.to_json, req_header
+         receipt_data.to_json, req_header
     _(last_response.status).must_equal 201
     _(last_response.header['Location'].size).must_be :>, 0
 
