@@ -3,9 +3,9 @@
   receiver: 'Bob'
   sender_sig: 'Alice_sig'
   receiver_sig: 'Bob_sig'
-  content: 'Hello'
+  is_money: True
 - sender: 'Alice'
   receiver: 'Emily'
   sender_sig: 'Alice_sig'
   receiver_sig: 'Emily_sig'
-  content: 'Hello World'
+  is_money: True
