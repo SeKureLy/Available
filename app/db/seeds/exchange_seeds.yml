@@ -1,0 +1,17 @@
+---
+- seller: 'Alice'
+  buyer: 'Bob'
+  item: 'Caffe latee'
+  amount: 80
+- seller: 'Alice'
+  buyer: 'Bob'
+  item: 'Chocolate donut'
+  amount: 65
+- seller: 'Alice'
+  buyer: 'Emily'
+  item: 'Caramel macchiato'
+  amount: 95
+- seller: 'Alice'
+  buyer: 'Emily'
+  item: 'Green grape ade'
+  amount: 60
