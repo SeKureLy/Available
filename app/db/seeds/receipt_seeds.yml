@@ -3,9 +3,9 @@
   receiver: 'Bob'
   sender_sig: 'Alice_sig'
   receiver_sig: 'Bob_sig'
-  is_money: True
+  is_money: true
 - sender: 'Alice'
   receiver: 'Emily'
   sender_sig: 'Alice_sig'
   receiver_sig: 'Emily_sig'
-  is_money: True
+  is_money: true
