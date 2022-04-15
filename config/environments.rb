@@ -18,7 +18,7 @@ module AIS
     # Make the environment variables accessible to other classes
     def self.config = Figaro.env
     # Connect and make the database accessible to other classes
-    db_url = ENV.delete('DB_FILENAME')
+    db_url = ENV.delete('DATABASE_URL')
     DB = Sequel.connect("#{db_url}?encoding=utf8")
     def self.DB = DB # rubocop:disable Naming/MethodName
 
