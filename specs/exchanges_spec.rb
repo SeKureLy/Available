@@ -10,8 +10,8 @@ describe 'Test Exchange Handling' do
   end
 
   it 'HAPPY: should be able to get list of all exchanges' do
-    AIS::Exchange.create(DATA[:exchanges][0]).save
-    AIS::Exchange.create(DATA[:exchanges][1]).save
+    AIS::Exchange.create(DATA[:exchanges][0])
+    AIS::Exchange.create(DATA[:exchanges][1])
 
     get 'api/v1/exchanges'
     _(last_response.status).must_equal 200
