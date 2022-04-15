@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rake/testtask'
+require './require_app'
 
 task :default => :spec
 
@@ -16,7 +17,7 @@ Rake::TestTask.new(:spec) do |t|
 end
 
 desc 'Runs rubocop on tested code'
-task :style do
+task :style => [:spec, :audit] do
   sh 'rubocop .'
 end
 
@@ -45,7 +46,7 @@ namespace :db do
     require 'sequel'
 
     Sequel.extension :migration
-    app = AIS::Api
+    @app = AIS::Api
   end
 
   task :load_models do
@@ -53,29 +54,25 @@ namespace :db do
   end
 
   desc 'Run migrations'
-  task :migrate => :print_env do
+  task :migrate => [:load, :print_env] do
     puts 'Migrating database to latest'
-    Sequel::Migrator.run(app.DB, 'app/db/migrations')
+    Sequel::Migrator.run(@app.DB, 'app/db/migrations')
   end
 
-  desc 'Delete database'
+  desc 'Destroy data in database; maintain tables'
   task :delete => :load_models do
-    # app.DB[:documents].delete
-    # app.DB[:projects].delete
-    AIS::Receipt.dataset.destroy
+    AIS::Exchange.dataset.destroy
   end
 
   desc 'Delete dev or test database file'
-  task :drop do
-    if app.environment == :production
+  task :drop => :load do
+    if @app.environment == :production
       puts 'Cannot wipe production database!'
       return
     end
 
-    FileUtils.rm(app.config.DB_FILENAME)
-    puts "Deleted #{app.config.DB_FILENAME}"
+    db_filename = "app/db/store/#{AIS::Api.environment}.db"
+    FileUtils.rm(db_filename)
+    puts "Deleted #{db_filename}"
   end
-
-  desc 'Delete and migrate again'
-  task reset: [:drop, :migrate]
 end

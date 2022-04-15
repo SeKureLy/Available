@@ -6,7 +6,8 @@ require 'sequel'
 module AIS
   # Holds a full secret receipt
   class Exchange < Sequel::Model
-    one_to_many :receipt
+    one_to_many :receipts
+    plugin :association_dependencies, receipts: :destroy
 
     plugin :timestamps
 
