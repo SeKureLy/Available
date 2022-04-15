@@ -16,10 +16,15 @@ module AIS
         { data: {
           type: 'receipt',
           attributes: {
-            id:, sender:, receiver:, sender_sig:, receiver_sig:, is_money:
+            id: id,
+            sender: sender,
+            receiver: receiver,
+            sender_sig: sender_sig,
+            receiver_sig: receiver_sig,
+            is_money: is_money
           }
         }, included: {
-          exchange:
+          exchange: exchange
         } }, options
       )
     end
