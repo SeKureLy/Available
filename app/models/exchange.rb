@@ -16,11 +16,7 @@ module AIS
         { data: {
           type: 'exchange',
           attributes: {
-            id: id,
-            seller: seller,
-            buyer: buyer,
-            item: item,
-            amount: amount
+            id:, seller:, buyer:, item:, amount:
           }
         } }, options
       )
