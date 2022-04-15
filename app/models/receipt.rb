@@ -8,7 +8,7 @@ module AIS
   class Receipt < Sequel::Model
     # two receipt form one exchange
     many_to_one :exchange
-    plugin :association_dependencies, receipts: :destroy  
+    plugin :association_dependencies, receipts: :destroy
 
     plugin :timestamps
 
