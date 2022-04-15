@@ -22,7 +22,7 @@ describe 'Test Exchange Handling' do
 
   it 'HAPPY: should be able to get details of a single exchange' do
     existing_exchange = DATA[:exchanges][1]
-    AIS::Exchange.create(existing_exchange).save
+    AIS::Exchange.create(existing_exchange)
     id = AIS::Exchange.first.id
 
     get "/api/v1/exchanges/#{id}"
