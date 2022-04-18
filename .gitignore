@@ -1,2 +1,5 @@
 _*
-app/db/store/*
+app/db/store/*.db
+config/*.yml
+.bundle
+.irb_history

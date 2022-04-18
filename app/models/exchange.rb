@@ -5,21 +5,19 @@ require 'sequel'
 
 module AIS
   # Holds a full secret receipt
-  class Receipt < Sequel::Model
-    # two receipt form one exchange
-    many_to_one :exchange
+  class Exchange < Sequel::Model
+    one_to_many :receipts
+    plugin :association_dependencies, receipts: :destroy
 
     plugin :timestamps
 
     def to_json(options = {})
       JSON(
         { data: {
-          type: 'receipt',
+          type: 'exchange',
           attributes: {
-            id:, sender:, receiver:, sender_sig:, receiver_sig:, is_money:
+            id:, seller:, buyer:, item:, amount:
           }
-        }, included: {
-          exchange:
         } }, options
       )
     end
