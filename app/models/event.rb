@@ -8,6 +8,8 @@ module Available
   class Event < Sequel::Model
     many_to_one :calendar
 
+    plugin :uuid, field: :id
+    
     def to_json(options = {})
       JSON(
         { data: {
