@@ -1,4 +1,4 @@
-# AIS API
+# Available API
 
 API to store and retrieve business transaction receipts (configuration, credentials)
 

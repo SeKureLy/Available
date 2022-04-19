@@ -3,7 +3,7 @@
 require 'json'
 require 'sequel'
 
-module AIS
+module Available
   # Holds a full secret receipt
   class Calendar < Sequel::Model
     one_to_many :events

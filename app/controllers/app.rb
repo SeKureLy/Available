@@ -3,8 +3,8 @@
 require 'roda'
 require 'json'
 
-module AIS
-  # Web controller for AIS API
+module Available
+  # Web controller for Available API
   class Api < Roda
     plugin :halt
 
@@ -12,7 +12,7 @@ module AIS
       response['Content-Type'] = 'application/json'
 
       routing.root do
-        { message: 'AIS_API up at /api/v1' }.to_json
+        { message: 'Available_API up at /api/v1' }.to_json
       end
 
       @api_root = 'api/v1'

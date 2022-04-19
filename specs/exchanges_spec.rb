@@ -10,8 +10,8 @@ describe 'Test Exchange Handling' do
   end
 
   it 'HAPPY: should be able to get list of all exchanges' do
-    AIS::Exchange.create(DATA[:exchanges][0])
-    AIS::Exchange.create(DATA[:exchanges][1])
+    Available::Exchange.create(DATA[:exchanges][0])
+    Available::Exchange.create(DATA[:exchanges][1])
 
     get 'api/v1/exchanges'
     _(last_response.status).must_equal 200
@@ -22,8 +22,8 @@ describe 'Test Exchange Handling' do
 
   it 'HAPPY: should be able to get details of a single exchange' do
     existing_exchange = DATA[:exchanges][1]
-    AIS::Exchange.create(existing_exchange)
-    id = AIS::Exchange.first.id
+    Available::Exchange.create(existing_exchange)
+    id = Available::Exchange.first.id
 
     get "/api/v1/exchanges/#{id}"
     _(last_response.status).must_equal 200
@@ -51,7 +51,7 @@ describe 'Test Exchange Handling' do
     _(last_response.header['Location'].size).must_be :>, 0
 
     created = JSON.parse(last_response.body)['data']['data']['attributes']
-    exchange = AIS::Exchange.first
+    exchange = Available::Exchange.first
 
     _(created['id']).must_equal exchange.id
     _(created['seller']).must_equal existing_exchange['seller']
