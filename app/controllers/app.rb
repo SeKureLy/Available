@@ -80,7 +80,7 @@ module Available
           routing.post do
             new_data = JSON.parse(routing.body.read)
             new_cal = Calendar.new(new_data)
-            raise('Could not save calandar') unless new_cal.save
+            raise('Could not save calendar') unless new_cal.save
 
             response.status = 201
             response['Location'] = "#{@cal_route}/#{new_cal.id}"
