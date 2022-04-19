@@ -11,7 +11,7 @@ module Available
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :share_id
+    set_allowed_columns :title, :created_by, :share_id
 
     def to_json(options = {})
       JSON(
