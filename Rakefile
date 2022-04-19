@@ -3,7 +3,6 @@
 require 'rake/testtask'
 require './require_app'
 
-# rubocop:disable Style/HashSyntax, Style/SymbolArray
 task :default => :spec
 
 desc 'Tests API specs only'
@@ -41,7 +40,7 @@ task :console => :print_env do
   sh 'pry -r ./spec/test_load_all'
 end
 
-namespace :db do # rubocop:disable Metrics/BlockLength
+namespace :db do
   task :load do
     require_app(nil) # load nothing by default
     require 'sequel'
@@ -85,4 +84,3 @@ namespace :newkey do
     puts "DB_KEY: #{SecureDB.generate_key}"
   end
 end
-# rubocop:enable Style/HashSyntax, Style/SymbolArray

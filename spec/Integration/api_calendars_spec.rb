@@ -63,10 +63,10 @@ describe 'Test Calendar Handling' do
       post 'api/v1/calendars', @calendar_data.to_json, @req_header
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
-  
+
       created = JSON.parse(last_response.body)['data']['data']['attributes']
       calendar = Available::Calendar.first
-  
+
       _(created['id']).must_equal calendar.id
       _(created['title']).must_equal @calendar_data['title']
       _(created['created_by']).must_equal @calendar_data['created_by']
