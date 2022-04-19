@@ -10,6 +10,8 @@ module Available
     plugin :association_dependencies, events: :destroy
 
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :title, :share_id
 
     def to_json(options = {})
       JSON(

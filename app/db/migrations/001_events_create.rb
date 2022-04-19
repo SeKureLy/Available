@@ -8,10 +8,10 @@ Sequel.migration do
       uuid :id, primary_key: true
       foreign_key :calendar_id, table: :calendars
 
-      String :title
+      String :title_secure
       DateTime :start_time
       DateTime :end_time
-      String :description
+      String :description_secure
       Integer :created_by
       Integer :share_id
     end
