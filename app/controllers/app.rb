@@ -17,74 +17,80 @@ module Available
 
       @api_root = 'api/v1'
       routing.on @api_root do
-        routing.on 'exchanges' do
-          @exc_route = "#{@api_root}/exchanges"
+        routing.on 'calendars' do
+          @cal_route = "#{@api_root}/calendars"
 
-          routing.on String do |exc_id|
-            routing.on 'receipts' do
-              @rec_route = "#{@api_root}/exchanges/#{exc_id}/receipts"
-              # GET api/v1/exchanges/[exc_id]/receipts/[rec_id]
-              routing.get String do |rec_id|
-                rec = Receipt.where(exchange_id: exc_id, id: rec_id).first
-                rec ? rec.to_json : raise('Receipts not found')
+          routing.on String do |cal_id|
+            routing.on 'events' do
+              @event_route = "#{@api_root}/calendars/#{cal_id}/events"
+              # GET api/v1/calendars/[cal_id]/events/[event_id]
+              routing.get String do |event_id|
+                event = Event.where(calendar_id: cal_id, id: event_id).first
+                event ? event.to_json : raise('Event not found')
               rescue StandardError => e
                 routing.halt 404, { message: e.message }.to_json
               end
 
-              # GET api/v1/exchanges/[exc_id]/receipts
+              # GET api/v1/calendars/[cal_id]/events
               routing.get do
-                output = { data: Receipt.where(exchange_id: exc_id).all }
+                output = { data: Event.where(calendar_id: cal_id).all }
                 JSON.pretty_generate(output)
               rescue StandardError
-                routing.halt 404, { message: 'Could not find receipts' }.to_json
+                routing.halt 404, { message: 'Could not find events' }.to_json
               end
 
-              # POST api/v1/exchanges/[exc_id]/receipts
+              # POST api/v1/calendars/[cal_id]/events
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                exc = Exchange.where(id: exc_id).first
-                new_rec = exc.add_receipt(new_data)
-                if new_rec
+                cal = Calendar.where(id: cal_id).first
+                new_event = cal.add_event(new_data)
+                if new_event
                   response.status = 201
-                  response['Location'] = "#{@rec_route}/#{new_rec.id}"
-                  { message: 'Receipt saved', data: new_rec }.to_json
+                  response['Location'] = "#{@event_route}/#{new_event.id}"
+                  { message: 'Event saved', data: new_event }.to_json
                 else
-                  routing.halt 400, 'Could not save receipt'
+                  routing.halt 400, 'Could not save event'
                 end
-
-              rescue StandardError
-                routing.halt 500, { message: 'Database error' }.to_json
+              rescue Sequel::MassAssignmentRestriction
+                Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+                routing.halt 400, { message: 'Illegal Attributes' }.to_json
+              rescue StandardError => e
+                routing.halt 500, { message: e.message }.to_json
               end
             end
 
-            # GET api/v1/exchanges/[exc_id]
+            # GET api/v1/calendars/[cal_id]
             routing.get do
-              exc = Exchange.first
-              exc ? exc.to_json : raise('Exchange not found')
+              cal = Calendar.first(id: cal_id)
+              cal ? cal.to_json : raise('Calendar not found')
             rescue StandardError => e
               routing.halt 404, { message: e.message }.to_json
             end
           end
 
-          # GET api/v1/exchanges
+          # GET api/v1/calendars
           routing.get do
-            output = { data: Exchange.all }
+            output = { data: Calendar.all }
             JSON.pretty_generate(output)
           rescue StandardError
-            routing.halt 404, { message: 'Could not find exchanges' }.to_json
+            routing.halt 404, { message: 'Could not find calendars' }.to_json
           end
 
-          # POST api/v1/exchanges
+          # POST api/v1/calendars
           routing.post do
             new_data = JSON.parse(routing.body.read)
-            new_exc = Exchange.new(new_data)
-            raise('Could not save exchange') unless new_exc.save
+            new_cal = Calendar.new(new_data)
+            raise('Could not save calandar') unless new_cal.save
 
             response.status = 201
-            response['Location'] = "#{@exc_route}/#{new_exc.id}"
-            { message: 'Exchange saved', data: new_exc }.to_json
+            response['Location'] = "#{@cal_route}/#{new_cal.id}"
+            { message: 'Calendar saved', data: new_cal }.to_json
+          rescue Sequel::MassAssignmentRestriction
+            Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+            routing.halt 400, { message: 'Illegal Attributes' }.to_json
           rescue StandardError => e
-            routing.halt 400, { message: e.message }.to_json
+            Api.logger.error "UNKOWN ERROR: #{e.message}"
+            routing.halt 500, { message: 'Unknown server error' }.to_json
           end
         end
       end
