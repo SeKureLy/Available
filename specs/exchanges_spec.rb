@@ -2,61 +2,59 @@
 
 require_relative './spec_helper'
 
-describe 'Test Exchange Handling' do
+describe 'Test Calendar Handling' do
   include Rack::Test::Methods
 
   before do
     wipe_database
   end
 
-  it 'HAPPY: should be able to get list of all exchanges' do
-    Available::Exchange.create(DATA[:exchanges][0])
-    Available::Exchange.create(DATA[:exchanges][1])
+  it 'HAPPY: should be able to get list of all calendars' do
+    Available::Calendar.create(DATA[:calendars][0])
+    Available::Calendar.create(DATA[:calendars][1])
 
-    get 'api/v1/exchanges'
+    get 'api/v1/calendars'
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
     _(result['data'].count).must_equal 2
   end
 
-  it 'HAPPY: should be able to get details of a single exchange' do
-    existing_exchange = DATA[:exchanges][1]
-    Available::Exchange.create(existing_exchange)
-    id = Available::Exchange.first.id
+  it 'HAPPY: should be able to get details of a single calendar' do
+    existing_calendar = DATA[:calendars][1]
+    Available::Calendar.create(existing_calendar)
+    id = Available::Calendar.first.id
 
-    get "/api/v1/exchanges/#{id}"
+    get "/api/v1/calendars/#{id}"
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
     _(result['data']['attributes']['id']).must_equal id
-    _(result['data']['attributes']['seller']).must_equal existing_exchange['seller']
-    _(result['data']['attributes']['buyer']).must_equal existing_exchange['buyer']
-    _(result['data']['attributes']['item']).must_equal existing_exchange['item']
-    _(result['data']['attributes']['amount']).must_equal existing_exchange['amount']
+    _(result['data']['attributes']['title']).must_equal existing_calendar['title']
+    _(result['data']['attributes']['created_by']).must_equal existing_calendar['created_by']
+    _(result['data']['attributes']['share_id']).must_equal existing_calendar['share_id']
   end
 
-  it 'SAD: should return error if unknown exchange requested' do
-    get '/api/v1/exchanges/foobar'
+  it 'SAD: should return error if unknown calendar requested' do
+    get '/api/v1/calendars/foobar'
 
     _(last_response.status).must_equal 404
   end
 
-  it 'HAPPY: should be able to create new exchanges' do
-    existing_exchange = DATA[:exchanges][1]
+  it 'HAPPY: should be able to create new calendars' do
+    existing_calendar = DATA[:calendars][1]
 
     req_header = { 'CONTENT_TYPE' => 'application/json' }
-    post 'api/v1/exchanges', existing_exchange.to_json, req_header
+    post 'api/v1/calendars', existing_calendar.to_json, req_header
     _(last_response.status).must_equal 201
     _(last_response.header['Location'].size).must_be :>, 0
 
     created = JSON.parse(last_response.body)['data']['data']['attributes']
-    exchange = Available::Exchange.first
+    calendar = Available::Calendar.first
 
-    _(created['id']).must_equal exchange.id
-    _(created['seller']).must_equal existing_exchange['seller']
-    _(created['buyer']).must_equal existing_exchange['buyer']
-    _(created['item']).must_equal existing_exchange['item']
-    _(created['amount']).must_equal existing_exchange['amount']
+    _(created['id']).must_equal calendar.id
+    _(created['title']).must_equal existing_calendar['title']
+    _(created['created_by']).must_equal existing_calendar['created_by']
+    _(created['share_id']).must_equal existing_calendar['share_id']
   end
 end

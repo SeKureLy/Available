@@ -12,7 +12,7 @@ end
 
 desc 'Test all the specs'
 Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'specs/*_spec.rb'
+  t.pattern = 'specs/exchanges_spec.rb'
   t.warning = false
 end
 
@@ -61,7 +61,7 @@ namespace :db do
 
   desc 'Destroy data in database; maintain tables'
   task :delete => :load_models do
-    Available::Exchange.dataset.destroy
+    Available::Calendar.dataset.destroy
   end
 
   desc 'Delete dev or test database file'
