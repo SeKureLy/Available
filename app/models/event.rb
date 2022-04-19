@@ -9,8 +9,9 @@ module Available
     many_to_one :calendar
 
     plugin :uuid, field: :id
+    plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :start_time, :end_time, :description, :share_id
+    set_allowed_columns :title, :start_time, :end_time, :description, :created_by, :share_id
 
     # Secure getters and setters
     def description
