@@ -30,7 +30,7 @@ describe 'Test event Handling' do
     event_data = DATA[:events][1]
     calendar = Available::Calendar.first
     event = calendar.add_event(event_data).save
-
+    
     get "/api/v1/calendars/#{calendar.id}/events/#{event.id}"
     puts "/api/v1/calendars/#{calendar.id}/events/#{event.id}"
     _(last_response.status).must_equal 200
@@ -62,7 +62,7 @@ describe 'Test event Handling' do
     _(last_response.header['Location'].size).must_be :>, 0
 
     created = JSON.parse(last_response.body)['data']['data']['attributes']
-    event = Available::event.first
+    event = Available::Event.first
 
     _(created['id']).must_equal event.id
     _(created['title']).must_equal event_data['title']
