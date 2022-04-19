@@ -4,7 +4,7 @@ require 'roda'
 require 'figaro'
 require 'logger'
 require 'sequel'
-require '../app/lib/secure_db'
+require './app/lib/secure_db'
 
 module Available
   # Configuration for the API
