@@ -13,7 +13,7 @@ module Available
         { data: {
           type: 'event',
           attributes: {
-            uuid:, title:, start_date:, end_date:, start_time:, end_time:, description:, created_by:, share_id:
+            id:, title:, start_date:, end_date:, start_time:, end_time:, description:, created_by:, share_id:
           }
         }, included: {
           calendar:
