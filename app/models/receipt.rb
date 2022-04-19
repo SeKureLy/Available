@@ -3,7 +3,7 @@
 require 'json'
 require 'sequel'
 
-module AIS
+module Available
   # Holds a full secret receipt
   class Receipt < Sequel::Model
     # two receipt form one exchange

@@ -5,7 +5,7 @@
 require_relative '../require_app'
 require_app
 
-def app = AIS::Api
+def app = Available::Api
 
 unless app.environment == :production
   require 'rack/test'
