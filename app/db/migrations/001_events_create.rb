@@ -8,8 +8,6 @@ Sequel.migration do
       primary_key :uuid
       foreign_key :calendar_id, table: :calendars
 
-      Integer :uuid
-      Integer :calendar_id
       String :title
       DateTime :start_time
       DateTime :end_time
