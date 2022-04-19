@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+require 'sequel'
+
+Sequel.migration do
+  change do
+    create_table(:events) do
+      uuid :id, primary_key: true
+      foreign_key :calendar_id, table: :calendars
+
+      String :title_secure
+      Ingeter :start_time
+      Ingeter :end_time
+      String :description_secure
+      Integer :created_by
+      Integer :share_id
+
+      DateTime :created_at
+      DateTime :updated_at
+    end
+  end
+end

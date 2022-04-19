@@ -4,13 +4,12 @@ require 'sequel'
 
 Sequel.migration do
   change do
-    create_table(:exchanges) do
+    create_table(:calendars) do
       primary_key :id
 
-      String :seller
-      String :buyer
-      String :item
-      Integer :amount
+      String :title
+      Integer :created_by
+      Integer :share_id
 
       DateTime :created_at
       DateTime :updated_at

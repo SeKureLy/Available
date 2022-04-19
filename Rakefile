@@ -7,12 +7,12 @@ task :default => :spec
 
 desc 'Tests API specs only'
 task :api_spec do
-  sh 'ruby specs/api_spec.rb'
+  sh 'ruby spec/api_spec.rb'
 end
 
 desc 'Test all the specs'
 Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'specs/*_spec.rb'
+  t.pattern = 'spec/**/*_spec.rb'
   t.warning = false
 end
 
@@ -37,7 +37,7 @@ end
 
 desc 'Run application console (pry)'
 task :console => :print_env do
-  sh 'pry -r ./specs/test_load_all'
+  sh 'pry -r ./spec/test_load_all'
 end
 
 namespace :db do
@@ -46,7 +46,7 @@ namespace :db do
     require 'sequel'
 
     Sequel.extension :migration
-    @app = AIS::Api
+    @app = Available::Api
   end
 
   task :load_models do
@@ -61,7 +61,7 @@ namespace :db do
 
   desc 'Destroy data in database; maintain tables'
   task :delete => :load_models do
-    AIS::Exchange.dataset.destroy
+    Available::Calendar.dataset.destroy
   end
 
   desc 'Delete dev or test database file'
@@ -71,8 +71,16 @@ namespace :db do
       return
     end
 
-    db_filename = "app/db/store/#{AIS::Api.environment}.db"
+    db_filename = "app/db/store/#{Available::Api.environment}.db"
     FileUtils.rm(db_filename)
     puts "Deleted #{db_filename}"
+  end
+end
+
+namespace :newkey do
+  desc 'Create sample cryptographic key for database'
+  task :db do
+    require_app('lib')
+    puts "DB_KEY: #{SecureDB.generate_key}"
   end
 end

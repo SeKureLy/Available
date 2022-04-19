@@ -1,9 +1,0 @@
----
-- seller: 'Alice'
-  buyer: 'Bob'
-  item: 'Caffe latee'
-  amount: 80
-- seller: 'Alice'
-  buyer: 'Emily'
-  item: 'Caramel macchiato'
-  amount: 95
