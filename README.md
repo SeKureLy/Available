@@ -7,9 +7,9 @@ API to store and retrieve business transaction receipts (configuration, credenti
 All routes return Json
 
 - GET `/`: Root route shows if Web API is running
-- GET `api/v1/receipts/`: returns all configuration IDs
-- GET `api/v1/receipts/[ID]`: returns details about a single receipt with given ID
-- POST `api/v1/receipts/`: creates a new receipt
+- GET `api/v1/events/`: returns all configuration IDs
+- GET `api/v1/events/[ID]`: returns details about a single event with given ID
+- POST `api/v1/events/`: creates a new event
 
 ## Install
 
