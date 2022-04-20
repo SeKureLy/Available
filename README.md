@@ -1,6 +1,6 @@
 # Available API
 
-API to store and retrieve business transaction receipts (configuration, credentials)
+API to store and share a calendar, to facilitate users organise events.
 
 ## Routes
 
