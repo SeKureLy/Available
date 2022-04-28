@@ -5,17 +5,18 @@ require 'json'
 require_relative './password'
 
 module Available
-  # Models a registered account
+  # Models a registered accountvhjrfgyui
   class Account < Sequel::Model
-    one_to_many :owned_groups class: :'Available::Group', key: :owner_id
-    many_to_many :members,
+    one_to_many :owned_groups, class: :'Available::Group', key: :owner_id
+    one_to_many :owned_calendars, class: :'Available::Calendar', key: :owner_id
+    many_to_many :involvements,
                  class: :'Available::Group',
                  join_table: :accounts_groups,
                  left_key: :member_id, right_key: :group_id
 
     plugin :association_dependencies,
            owned_groups: :destroy,
-           members: :nullify
+           involvements: :nullify
 
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password

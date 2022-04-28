@@ -6,9 +6,9 @@ Sequel.migration do
   change do
     create_table(:calendars) do
       primary_key :id
+      foreign_key :account_id, table: :accounts
 
       String :title
-      Integer :created_by
       Integer :share_id
 
       DateTime :created_at
