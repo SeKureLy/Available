@@ -12,14 +12,14 @@ module Available
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :created_by, :share_id
+    set_allowed_columns :title, :owner_id, :share_id
 
     def to_json(options = {})
       JSON(
         { data: {
           type: 'calendar',
           attributes: {
-            id:, title:, created_by:, share_id:
+            id:, title:, owner_id:, share_id:
           }
         } }, options
       )
