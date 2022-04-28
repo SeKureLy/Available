@@ -7,15 +7,15 @@ require_relative './password'
 module Available
   # Models a registered account
   class Account < Sequel::Model
-    # one_to_many :owned_projects, class: :'Available::Project', key: :owner_id
-    # many_to_many :collaborations,
-    #              class: :'Available::Project',
-    #              join_table: :accounts_projects,
-    #              left_key: :collaborator_id, right_key: :project_id
+    one_to_many :owned_groups class: :'Available::Group', key: :owner_id
+    many_to_many :members,
+                 class: :'Available::Group',
+                 join_table: :accounts_groups,
+                 left_key: :member_id, right_key: :group_id
 
-    # plugin :association_dependencies,
-    #        owned_projects: :destroy,
-    #        collaborations: :nullify
+    plugin :association_dependencies,
+           owned_groups: :destroy,
+           members: :nullify
 
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password
