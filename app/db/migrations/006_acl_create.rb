@@ -10,6 +10,7 @@ Sequel.migration do
       Integer :share_id, null: false # calender or events
       Integer :type, null: false # user, group
       Integer :target, null: false # user_id, group_id
+      Integer :privacy_level, null: false # detail, title
       Ingeter :start_time
       Ingeter :end_time
 

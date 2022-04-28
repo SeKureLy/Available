@@ -7,6 +7,7 @@ module Available
   # Holds a full secret receipt
   class Calendar < Sequel::Model
     one_to_many :events
+    many_to_one :account
     plugin :association_dependencies, events: :destroy
 
     plugin :timestamps
