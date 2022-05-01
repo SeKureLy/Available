@@ -8,11 +8,13 @@ module Available
   class Calendar < Sequel::Model
     one_to_many :events
     many_to_one :account
-    plugin :association_dependencies, events: :destroy
+
+    plugin :association_dependencies, 
+           events: :destroy
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :owner_id, :share_id
+    set_allowed_columns :title, :share_id
 
     def to_json(options = {})
       JSON(
