@@ -4,13 +4,12 @@ require 'sequel'
 
 Sequel.migration do
   change do
-    create_table(:calendars) do
+    create_table(:accounts) do
       primary_key :id
-      foreign_key :owner_id, table: :accounts
 
-      String :title
-      Integer :share_id
-
+      String :username, null: false, unique: true
+      String :email, null: false, unique: true
+      String :password_digest
       DateTime :created_at
       DateTime :updated_at
     end

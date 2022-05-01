@@ -19,6 +19,7 @@ gem 'rbnacl', '~>7'
 gem 'hirb'
 gem 'sequel', '~>5'
 group :development, :test do
+  gem 'sequel-seed'
   gem 'sqlite3'
 end
 
