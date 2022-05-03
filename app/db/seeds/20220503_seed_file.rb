@@ -5,7 +5,7 @@ Sequel.seed(:development) do
       puts 'Seeding accounts, projects, documents'
       create_accounts
       create_owned_calendars
-    #   create_documents
+      # create_owned_groups
     #   add_collaborators
     end
   end
@@ -13,10 +13,11 @@ Sequel.seed(:development) do
   require 'yaml'
   DIR = File.dirname(__FILE__)
   ACCOUNTS_INFO = YAML.load_file("#{DIR}/accounts_seed.yml")
-  OWNER_INFO = YAML.load_file("#{DIR}/owned_calendar.yml")
-  CAL_INFO = YAML.load_file("#{DIR}/calendars_seeds.yml")
-  EVENT_INFO = YAML.load_file("#{DIR}/events_seeds.yml")
-  GROUP_INFO = YAML.load_file("#{DIR}/owned_group.yml")
+  CAL_INFO = YAML.load_file("#{DIR}/calendars_seed.yml")
+  OWNED_CAL_INFO = YAML.load_file("#{DIR}/owned_calendar.yml")
+  GROUP_INFO = YAML.load_file("#{DIR}/groups_seed.yml")
+  OWNED_GROUP_INFO = YAML.load_file("#{DIR}/owned_group.yml")
+  EVENT_INFO = YAML.load_file("#{DIR}/events_seed.yml")
   
   def create_accounts
     ACCOUNTS_INFO.each do |account_info|
@@ -25,26 +26,28 @@ Sequel.seed(:development) do
   end
   
   def create_owned_calendars
-    OWNER_INFO.each do |owner|
+    OWNED_CAL_INFO.each do |owner|
       account = Available::Account.first(username: owner['username'])
       owner['cal_name'].each do |cal_name|
         cal_data = CAL_INFO.find { |cal| cal['title'] == cal_name }
         Available::CreateCalendarForOwner.call(
-            title: account.id, calendar_data: cal_data
+          owner_id: account.id, calendar_data: cal_data
         )
       end
     end
   end
 
-#   def create_owned_groups
-#     OWNER_INFO.each do |owner|
-#       account = Available::Account.first(username: owner['username'])
-#       owner['group_name'].each do |cal_name|
-#         cal_data = CAL_INFO.find { |cal| cal['title'] == cal_name }
-#         Available::CreateGroupForOwner.call( group_name: cal_data )
-#       end
-#     end
-#   end
+  def create_owned_groups
+    OWNED_GROUP_INFO.each do |owner|
+      account = Available::Account.first(username: owner['username'])
+      owner['group_name'].each do |group_name|
+        group_data = GROUP_INFO.find { |group| group['group_name'] == group_name }
+        Available::CreateGroupForOwner.call(
+          owner_id: account.id, group_name: group_name
+        )
+      end
+    end
+  end
   
 #   def create_documents
 #     doc_info_each = DOCUMENT_INFO.each
