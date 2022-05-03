@@ -86,7 +86,7 @@ namespace :db do
   end
 
   desc 'Seeds the development database'
-  task :seed => [:load_models] do
+  task :seed => [:migrate, :load_models] do
     require 'sequel/extensions/seed'
     Sequel::Seed.setup(:development)
     Sequel.extension :seed
