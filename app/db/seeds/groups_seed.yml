@@ -1,0 +1,7 @@
+---
+  - group_name: Data
+    owner: sekurely
+    members: furen
+  - group_name: Config
+    owner: furen
+    members: galit
