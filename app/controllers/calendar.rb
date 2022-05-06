@@ -4,7 +4,7 @@ require 'roda'
 require_relative './app'
 
 module Available
-  # Web controller for Credence API
+  # Web controller for Available API
   class Api < Roda
     route('calendars') do |routing|
         @cal_route = "#{@api_root}/calendars"

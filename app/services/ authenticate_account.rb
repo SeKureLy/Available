@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Credence
+module Available
     # Error for invalid credentials
     class UnauthorizedError < StandardError
       def initialize(msg = nil)
