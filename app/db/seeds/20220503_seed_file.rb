@@ -6,7 +6,7 @@ Sequel.seed(:development) do
       create_accounts
       create_owned_calendars
       # create_owned_groups
-    #   add_collaborators
+      create_events
     end
   end
   
@@ -49,15 +49,15 @@ Sequel.seed(:development) do
     end
   end
   
-#   def create_documents
-#     doc_info_each = DOCUMENT_INFO.each
-#     projects_cycle = Available::Project.all.cycle
-#     loop do
-#       doc_info = doc_info_each.next
-#       project = projects_cycle.next
-#       Available::CreateDocumentForProject.call(
-#         project_id: project.id, document_data: doc_info
-#       )
-#     end
-#   end
+  def create_events
+    event_info_each = EVENT_INFO.each
+    calendars_cycle = Available::Calendar.all.cycle
+    loop do
+      event_info = event_info_each.next
+      calendar = calendars_cycle.next
+      Available::CreateEventForCalendar.call(
+        cal_id: calendar.id, event_data: event_info
+      )
+    end
+  end
   
