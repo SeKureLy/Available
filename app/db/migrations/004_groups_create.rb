@@ -6,7 +6,7 @@ Sequel.migration do
   change do
     create_table(:groups) do
       primary_key :id
-      foreign_key :owner_id, :accounts
+      foreign_key :owner_id, table: :accounts
 
       String :group_name
       
