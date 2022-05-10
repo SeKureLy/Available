@@ -11,8 +11,8 @@ Sequel.migration do
       Integer :type, null: false # user, group
       Integer :target, null: false # user_id, group_id
       Integer :privacy_level, null: false # detail, title
-      Ingeter :start_time
-      Ingeter :end_time
+      Integer :start_time
+      Integer :end_time
 
       DateTime :created_at
       DateTime :updated_at
