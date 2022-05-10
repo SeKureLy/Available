@@ -17,8 +17,8 @@ describe 'Test Account Handling' do
       get "/api/v1/accounts/#{account.username}"
       _(last_response.status).must_equal 200
 
-      result = JSON.parse last_response.body
-      _(result['id']).must_equal account.id
+      result = JSON.parse(last_response.body)['data']['attributes']
+
       _(result['username']).must_equal account.username
       _(result['salt']).must_be_nil
       _(result['password']).must_be_nil
@@ -36,10 +36,9 @@ describe 'Test Account Handling' do
       post 'api/v1/accounts', @account_data.to_json, @req_header
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
-      created = JSON.parse(last_response.body)['data']
+      created = JSON.parse(last_response.body)['data']['data']['attributes']
       account = Available::Account.first
-
-      _(created['id']).must_equal account.id
+      
       _(created['username']).must_equal @account_data['username']
       _(created['email']).must_equal @account_data['email']
       _(account.password?(@account_data['password'])).must_equal true

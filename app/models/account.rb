@@ -38,12 +38,12 @@ module Available
 
     def to_json(options = {})
       JSON(
-        {
+        { data: {
           type: 'account',
-          id:,
-          username:,
-          email:
-        }, options
+          attributes: {
+            id:, username:, email:
+          }
+        } }, options
       )
     end
   end
