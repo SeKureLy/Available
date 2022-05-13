@@ -5,7 +5,7 @@ require 'sequel'
 Sequel.migration do
   change do
     create_table(:acl) do
-      primary_key :id 
+      primary_key :id
 
       Integer :share_id, null: false # calender or events
       Integer :type, null: false # user, group
@@ -19,7 +19,6 @@ Sequel.migration do
     end
   end
 end
-
 
 # event 1
 # 1, 1, 'user', 1, 176732988932

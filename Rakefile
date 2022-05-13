@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/HashSyntax, Style/SymbolArray, Metrics/BlockLength
 require 'rake/testtask'
 require './require_app'
 
@@ -38,7 +37,7 @@ task :release? => [:spec, :style, :audit] do
 end
 
 task :print_env do
-  puts "Environment: #{ENV['RACK_ENV'] || 'development'}"
+  puts "Environment: #{ENV.fetch('RACK_ENV', 'development')}"
 end
 
 desc 'Run application console (pry)'
@@ -112,4 +111,3 @@ namespace :run do
     sh 'rackup -p 3000'
   end
 end
-# rubocop:enable Style/HashSyntax, Style/SymbolArray, Metrics/BlockLength
