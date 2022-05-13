@@ -9,7 +9,7 @@ Sequel.migration do
       foreign_key :owner_id, table: :accounts
 
       String :group_name
-      
+
       DateTime :created_at
       DateTime :updated_at
     end
