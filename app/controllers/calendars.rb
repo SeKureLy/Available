@@ -22,7 +22,7 @@ module Available
 
           # GET api/v1/calendars/[cal_id]/events
           routing.get do
-            output = { data: Event.where(calendar_id: cal_id).all }
+            output = { data: Event.where(calendar_id: cal_id).events }
             JSON.pretty_generate(output)
           rescue StandardError
             routing.halt 404, { message: 'Could not find events' }.to_json
@@ -31,20 +31,21 @@ module Available
           # POST api/v1/calendars/[cal_id]/events
           routing.post do
             new_data = JSON.parse(routing.body.read)
-            cal = Calendar.where(id: cal_id).first
-            new_event = cal.add_event(new_data)
-            if new_event
-              response.status = 201
-              response['Location'] = "#{@event_route}/#{new_event.id}"
-              { message: 'Event saved', data: new_event }.to_json
-            else
-              routing.halt 400, 'Could not save event'
-            end
+
+            new_event = CreateEventForCalendar.call(
+              cal_id: cal_id, event_data: new_data
+            )
+
+            response.status = 201
+            response['Location'] = "#{@event_route}/#{new_event.id}"
+            { message: 'Event saved', data: new_event }.to_json
+
           rescue Sequel::MassAssignmentRestriction
             Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
             routing.halt 400, { message: 'Illegal Attributes' }.to_json
           rescue StandardError => e
-            routing.halt 500, { message: e.message }.to_json
+            Api.logger.warn "MASS-ASSIGNMENT: #{e.message}"
+            routing.halt 500, { message: 'Error creating event' }.to_json
           end
         end
 
@@ -59,10 +60,11 @@ module Available
 
       # GET api/v1/calendars
       routing.get do
-        output = { data: Calendar.all }
-        JSON.pretty_generate(output)
+        account = Account.first(username: @auth_account['username'])
+        calendars = account.calendars
+        JSON.pretty_generate(data: calendars)
       rescue StandardError
-        routing.halt 404, { message: 'Could not find calendars' }.to_json
+        routing.halt 403, { message: 'Could not find any calendars' }.to_json
       end
 
       # POST api/v1/calendars
@@ -82,5 +84,6 @@ module Available
         routing.halt 500, { message: 'Unknown server error' }.to_json
       end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end
