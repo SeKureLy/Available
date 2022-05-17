@@ -28,7 +28,7 @@ module Available
       rescue AuthToken::InvalidTokenError
         routing.halt 403, { message: 'Invalid auth token' }.to_json
       end
-      
+
       routing.root do
         { message: 'Available_API up at /api/v1' }.to_json
       end

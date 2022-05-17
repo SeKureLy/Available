@@ -19,8 +19,8 @@ module Available
     def self.call(credentials)
       account = Account.first(username: credentials[:username])
       raise unless account.password?(credentials[:password])
+
       account_and_token(account)
-      
     rescue StandardError
       raise(UnauthorizedError, credentials)
     end

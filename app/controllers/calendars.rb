@@ -33,7 +33,7 @@ module Available
             new_data = JSON.parse(routing.body.read)
 
             new_event = CreateEventForCalendar.call(
-              cal_id: cal_id, event_data: new_data
+              cal_id:, event_data: new_data
             )
 
             response.status = 201
@@ -84,6 +84,5 @@ module Available
         routing.halt 500, { message: 'Unknown server error' }.to_json
       end
     end
-    # rubocop:enable Metrics/BlockLength
   end
 end
