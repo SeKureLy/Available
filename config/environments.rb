@@ -4,7 +4,7 @@ require 'roda'
 require 'figaro'
 require 'logger'
 require 'sequel'
-require './app/lib/secure_db'
+require_app('lib')
 
 module Available
   # Configuration for the API
@@ -32,6 +32,7 @@ module Available
 
       # Load crypto keys
       SecureDB.setup(ENV.delete('DB_KEY'))
+      AuthToken.setup(ENV.fetch('MSG_KEY'))
     end
     # rubocop:enable Lint/ConstantDefinitionInBlock
 

@@ -28,7 +28,7 @@ module Available
             type: 'group',
             attributes: {
               id:,
-              group_name:,
+              group_name:
             }
           }
         }, options

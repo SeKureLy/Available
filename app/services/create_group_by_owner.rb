@@ -5,7 +5,7 @@ module Available
   class CreateGroupForOwner
     def self.call(owner_id:, group_name:)
       Account.first(id: owner_id)
-             .add_owned_group(group_name: group_name)
+             .add_owned_group(group_name:)
     end
   end
 end

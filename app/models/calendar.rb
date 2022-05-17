@@ -9,7 +9,7 @@ module Available
     one_to_many :events
     many_to_one :account
 
-    plugin :association_dependencies, 
+    plugin :association_dependencies,
            events: :destroy
 
     plugin :timestamps

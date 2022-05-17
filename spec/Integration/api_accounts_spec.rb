@@ -38,7 +38,7 @@ describe 'Test Account Handling' do
       _(last_response.header['Location'].size).must_be :>, 0
       created = JSON.parse(last_response.body)['data']['data']['attributes']
       account = Available::Account.first
-      
+
       _(created['username']).must_equal @account_data['username']
       _(created['email']).must_equal @account_data['email']
       _(account.password?(@account_data['password'])).must_equal true
