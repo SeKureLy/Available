@@ -1,32 +1,38 @@
-describe 'Getting calendars' do
-    describe 'Getting list of calendars' do
-        before do 
-            @account_data = DATA[:accounts][0]
-            account = Available::Account.create(@account_data)
-            account.add_owned_calendar(DATA[:calendars][0])
-            account.add_owned_calendar(DATA[:calendars][1])
-        end
+# frozen_string_literal: true
 
-        it 'HAPPY: should get list for authorized account' do
-            auth = Available::AuthenticateAccount.call(
-                username: @account_data['username'],
-                password: @account_data['password']
-            )
+require_relative '../spec_helper'
 
-            header 'AUTHORIZATION', "Bearer #{auth[:attributes][:auth_token]}"
-            get 'api/v1/calendars'
-            _(last_response.status).must_equal 200
+describe 'Test AuthenticateAccount service' do
+  before do
+    wipe_database
 
-            result = JSON.parse last_response.body
-            _(result['data'].count).must_equal 2
-        end
-
-        it 'BAD: should not process for unauthorized account' do
-            header 'AUTHORIZATION', 'Bearer bad_token'
-            get 'api/v1/calendars'
-            _(last_response.status).must_equal 403
-
-            result = JSON.parse last_response.body
-            _(result['data']).must_be_nil
-        end
+    DATA[:accounts].each do |account_data|
+      Available::Account.create(account_data)
     end
+  end
+
+  it 'HAPPY: should authenticate valid account credentials' do
+    credentials = DATA[:accounts].first
+    account = Available::AuthenticateAccount.call(
+      username: credentials['username'], password: credentials['password']
+    )
+    _(account).wont_be_nil
+  end
+
+  it 'SAD: will not authenticate with invalid password' do
+    credentials = DATA[:accounts].first
+    _(proc {
+      Available::AuthenticateAccount.call(
+        username: credentials['username'], password: 'malword'
+      )
+    }).must_raise Available::AuthenticateAccount::UnauthorizedError
+  end
+
+  it 'BAD: will not authenticate with invalid credentials' do
+    _(proc {
+      Available::AuthenticateAccount.call(
+        username: 'maluser', password: 'malword'
+      )
+    }).must_raise Available::AuthenticateAccount::UnauthorizedError
+  end
+end
