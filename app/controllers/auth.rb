@@ -24,15 +24,14 @@ module Available
           routing.halt 500
         end
       end
-      
+
       routing.is 'authenticate' do
         # POST /api/v1/auth/authenticate
         routing.post do
           credentials = JsonRequestBody.parse_symbolize(request.body.read)
           auth_account = AuthenticateAccount.call(credentials)
           auth_account.to_json
-        rescue UnauthorizedError => e
-          puts [e.class, e.message].join ': '
+        rescue AuthenticateAccount::UnauthorizedError
           routing.halt '403', { message: 'Invalid credentials' }.to_json
         end
       end
