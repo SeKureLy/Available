@@ -5,7 +5,7 @@ Sequel.seed(:development) do
     puts 'Seeding accounts, projects, documents'
     create_accounts
     create_owned_calendars
-    # create_owned_groups
+    create_owned_groups
     create_events
   end
 end
@@ -41,9 +41,8 @@ def create_owned_groups
   OWNED_GROUP_INFO.each do |owner|
     account = Available::Account.first(username: owner['username'])
     owner['group_name'].each do |group_name|
-      group_data = GROUP_INFO.find { |group| group['group_name'] == group_name }
       Available::CreateGroupForOwner.call(
-        owner_id: account.id, group_name: group_data
+        owner_id: account.id, group_name: group_name
       )
     end
   end
