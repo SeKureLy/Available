@@ -13,10 +13,6 @@ module Available
 
     include SecureRequestHelpers
 
-    # def secure_request?(routing)
-    #   routing.scheme.casecmp(Api.config.SECURE_SCHEME).zero?
-    # end
-
     route do |routing|
       response['Content-Type'] = 'application/json'
 

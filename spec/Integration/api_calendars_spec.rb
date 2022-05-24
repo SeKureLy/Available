@@ -23,10 +23,11 @@ describe 'Test Calendar Handling' do
           username: @account_data['username'],
           password: @account_data['password']
         )
+# puts auth
         header 'AUTHORIZATION', "Bearer #{auth[:attributes][:auth_token]}"
         get 'api/v1/calendars'
+puts last_response
         _(last_response.status).must_equal 200
-
         result = JSON.parse last_response.body
         _(result['data'].count).must_equal 2
       end
