@@ -60,8 +60,7 @@ module Available
 
       # GET api/v1/calendars
       routing.get do
-        account = Account.first(username: @auth_account['username'])
-        calendars = account.calendars
+        calendars = GetOwnCalendar(@auth_account['username'])
         JSON.pretty_generate(data: calendars)
       rescue StandardError
         routing.halt 403, { message: 'Could not find any calendars' }.to_json
@@ -70,9 +69,9 @@ module Available
       # POST api/v1/calendars
       routing.post do
         new_data = JSON.parse(routing.body.read)
-        new_cal = Calendar.new(new_data)
-        raise('Could not save calendar') unless new_cal.save
-
+        owner_id = Account.first(username: @auth_account['username']).owner_id
+        CreateCalendarForOwner(owner_id, new_data)
+        
         response.status = 201
         response['Location'] = "#{@cal_route}/#{new_cal.id}"
         { message: 'Calendar saved', data: new_cal }.to_json
