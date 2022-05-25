@@ -12,8 +12,6 @@ Sequel.migration do
       Integer :start_time
       Integer :end_time
       String :description_secure
-      Integer :created_by
-      Integer :share_id
 
       DateTime :created_at
       DateTime :updated_at

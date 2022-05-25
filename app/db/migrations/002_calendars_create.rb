@@ -8,8 +8,7 @@ Sequel.migration do
       primary_key :id
       foreign_key :owner_id, table: :accounts
 
-      String :title
-      Integer :share_id
+      String :title, null: false
 
       DateTime :created_at
       DateTime :updated_at
