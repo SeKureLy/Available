@@ -2,7 +2,7 @@
 
 module Available
   # Service object to create a new group for an owner
-  class GetOwnCalendar
+  class GetEventQuery
     # Error for owner cannot be collaborator
     class ForbiddenError < StandardError
       def message

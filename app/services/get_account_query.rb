@@ -13,7 +13,7 @@ module Available
     def self.call(requestor:, username:)
       account = Account.first(username: username)
 
-      policy = AccountPolicy.new(requestor, account)
+      policy = AccountPolicy.new(requestor, username)
       policy.can_view? ? account : raise(ForbiddenError)
     end
   end
