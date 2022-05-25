@@ -28,7 +28,6 @@ def create_owned_calendars
   OWNED_CAL_INFO.each do |owner|
     owner['cal_name'].each do |cal_name|
       cal_data = CAL_INFO.find { |cal| cal['title'] == cal_name }
-      puts cal_data
       Available::CreateCalendarForOwner.call(
         username: owner['username'], calendar_data: cal_data
       )
