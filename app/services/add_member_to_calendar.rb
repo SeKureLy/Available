@@ -8,12 +8,15 @@ module Available
       def message = 'Owner cannot be member of project'
     end
 
-    def self.call(email:, calendar_id:)
+    def self.call(email:, title:)
+      puts email
+      puts title
       member = Account.first(email:)
-      calendar = Calendar.first(id: calendar_id)
+      calendar = Calendar.first(title:)
+      puts calendar
       raise(OwnerNotMemberError) if calendar.owner.id == member.id
 
-      calendar.add_member(calendar)
+      calendar.add_member(member)
     end
   end
 end
