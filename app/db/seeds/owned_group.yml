@@ -1,7 +1,0 @@
----
-  - username: sekurely
-    group_name:
-      - Data
-  - username: furen
-    group_name:
-      - Config
