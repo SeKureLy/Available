@@ -4,16 +4,18 @@ module Available
   # Add a member to another owner's existing calendar
   class AddMemberToCalendar
     # Error for owner cannot be member
-    class OwnerNotMemberError < StandardError
+    class ForbiddenError < StandardError
       def message = 'Owner cannot be member of project'
     end
 
-    def self.call(email:, title:)
-      member = Account.first(email:)
+    def self.call(account:,email:, title:)
+      invitee = Account.first(email:)
       calendar = Calendar.first(title:)
-      raise(OwnerNotMemberError) if calendar.owner.id == member.id
+      policy = InvolvementRequestPolicy.new(calendar, account, invitee)
+      raise(ForbiddenError) unless policy.can_invite?
 
-      calendar.add_member(member)
+      calendar.add_member(invitee)
+      invitee
     end
   end
 end
