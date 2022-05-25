@@ -40,7 +40,7 @@ def create_calendar_members
     calendar = Available::Calendar.first(title: calendar_info['cal_title'])
     calendar_info['member_email'].each do |member|
       Available::AddMemberToCalendar.call(
-        email: member, title: calendar_info['cal_title']
+        account: calendar.owner,email: member, title: calendar_info['cal_title']
       )
     end
   end
@@ -53,7 +53,7 @@ def create_events
     event_info = event_info_each.next
     calendar = calendars_cycle.next
     Available::CreateEventForCalendar.call(
-      cal_id: calendar.id, event_data: event_info
+      account: calendar.owner, cal_id: calendar.id, event_data: event_info
     )
   end
 end
