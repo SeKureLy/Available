@@ -1,7 +1,8 @@
 ---
   - username: sekurely
     cal_name:
-      - Data Project
+      - SEC meeting
   - username: furen
     cal_name:
-      - Config Project 雷門
+      - NTHU Lab meeting
+      - Other Calendar

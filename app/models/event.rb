@@ -11,17 +11,9 @@ module Available
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :start_time, :end_time, :description, :created_by, :share_id
+    set_allowed_columns :title, :start_time, :end_time, :description
 
     # Secure getters and setters
-    def description
-      SecureDB.decrypt(description_secure)
-    end
-
-    def description=(plaintext)
-      self.description_secure = SecureDB.encrypt(plaintext)
-    end
-
     def title
       SecureDB.decrypt(title_secure)
     end
@@ -30,17 +22,33 @@ module Available
       self.title_secure = SecureDB.encrypt(plaintext)
     end
 
+    def description
+      SecureDB.decrypt(description_secure)
+    end
+
+    def description=(plaintext)
+      self.description_secure = SecureDB.encrypt(plaintext)
+    end
+
+    # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
       JSON(
         { data: {
-          type: 'event',
-          attributes: {
-            id:, title:, start_time:, end_time:, description:, created_by:, share_id:
-          }
-        }, included: {
-          calendar:
-        } }, options
+            type: 'event',
+            attributes: {
+              id:, 
+              title:, 
+              start_time:, 
+              end_time:, 
+              description:
+            }
+          }, 
+          included: {
+            calendar:
+          } 
+        }, options
       )
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
