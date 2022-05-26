@@ -33,7 +33,7 @@ module Available
             new_data = JSON.parse(routing.body.read)
 
             new_event = CreateEventForCalendar.call(
-              account: @auth_account, cal_id:, event_data: new_data
+              account: @account, cal_id:, event_data: new_data
             )
 
             response.status = 201
@@ -116,8 +116,9 @@ module Available
         # POST api/v1/calendars
         routing.post do
           new_data = JSON.parse(routing.body.read)
-          owner_id = Account.first(username: @auth_account).owner_id
-          CreateCalendarForOwner(owner_id, new_data)
+          new_cal = CreateCalendarForOwner.call(
+            username: @auth_account, calendar_data:new_data
+          )
 
           response.status = 201
           response['Location'] = "#{@cal_route}/#{new_cal.id}"

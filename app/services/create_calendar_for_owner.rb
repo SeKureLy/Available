@@ -6,6 +6,7 @@ module Available
     def self.call(username:, calendar_data:)
       account = Account.first(username:)
       raise('Could not save calendar') unless account.add_owned_calendar(calendar_data)
+      Calendar.first(title: calendar_data['title'])
     end
   end
 end

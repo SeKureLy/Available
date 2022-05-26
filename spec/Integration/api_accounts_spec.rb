@@ -6,6 +6,7 @@ describe 'Test Account Handling' do
   include Rack::Test::Methods
 
   before do
+    @req_header = { 'CONTENT_TYPE' => 'application/json' }
     wipe_database
   end
 
@@ -13,7 +14,12 @@ describe 'Test Account Handling' do
     it 'HAPPY: should be able to get details of a single account' do
       account_data = DATA[:accounts][1]
       account = Available::Account.create(account_data)
+      credentials = { username: account_data['username'],
+                      password: account_data['password'] }
+      post 'api/v1/auth/authenticate', credentials.to_json, @req_header
+      auth_token = JSON.parse(last_response.body)['attributes']['auth_token']
 
+      header 'AUTHORIZATION', "Bearer #{auth_token}"
       get "/api/v1/accounts/#{account.username}"
       _(last_response.status).must_equal 200
 
