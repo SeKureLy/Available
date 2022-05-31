@@ -8,9 +8,9 @@ module Available
         'You are not allowed to add more events'
       end
     end
-    def self.call(account:, cal_id:, event_data:)
+    def self.call(auth:, cal_id:, event_data:)
       calendar = Calendar.first(id: cal_id)
-      policy = CalendarPolicy.new(account, calendar)
+      policy = CalendarPolicy.new(auth[:account], calendar, auth[:scope])
       raise ForbiddenError unless policy.can_add_events?
       Calendar.first(id: cal_id)
               .add_event(event_data)

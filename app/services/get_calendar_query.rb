@@ -17,10 +17,10 @@ module Available
       end
     end
 
-    def self.call(account:, calendar:)
+    def self.call(auth:, calendar:)
       raise NotFoundError unless calendar
 
-      policy = CalendarPolicy.new(account, calendar)
+      policy = CalendarPolicy.new(auth[:account], calendar, auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
       calendar.full_details.merge(policies: policy.summary)

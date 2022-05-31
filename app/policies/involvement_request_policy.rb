@@ -3,23 +3,27 @@
 module Available
     # Policy to determine if an account can view a particular calendar
     class InvolvementRequestPolicy
-      def initialize(calendar, requestor_account, target_account)
+      def initialize(calendar, requestor_account, target_account, auth_scope = nil)
         @calendar = calendar
         @requestor_account = requestor_account
         @target_account = target_account
-        @requestor = CalendarPolicy.new(requestor_account, calendar)
-        @target = CalendarPolicy.new(target_account, calendar)
+        @requestor = CalendarPolicy.new(requestor_account, calendar, auth_scope)
+        @target = CalendarPolicy.new(target_account, calendar, auth_scope)
       end
   
       def can_invite?
-        @requestor.can_add_members? && @target.can_be_member?
+        can_write? &&(@requestor.can_add_members? && @target.can_be_member?)
       end
   
       def can_remove?
-        @requestor.can_remove_members? && target_is_member?
+        can_write? &&(@requestor.can_remove_members? && target_is_member?)
       end
   
       private
+
+      def can_write?
+        @auth_scope ? @auth_scope.can_write?('calendars') : false
+      end
   
       def target_is_member?
         @calendar.members.include?(@target_account)

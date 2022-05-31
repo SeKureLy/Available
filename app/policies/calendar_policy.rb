@@ -3,22 +3,23 @@
 module Available
     # Policy to determine if an account can view a particular calendar
     class CalendarPolicy
-      def initialize(account, calendar)
+      def initialize(account, calendar, auth_scope = nil)
         @account = account
         @calendar = calendar
+        @auth_scope = auth_scope
       end
   
       def can_view?
-        account_is_owner? || account_is_member?
+        can_read? && (account_is_owner? || account_is_member?)
       end
   
       # duplication is ok!
       def can_edit?
-        account_is_owner? || account_is_member?
+        can_write? && account_is_owner? || account_is_member?
       end
   
       def can_delete?
-        account_is_owner?
+        can_write? && account_is_owner?
       end
   
       def can_leave?
@@ -26,19 +27,19 @@ module Available
       end
   
       def can_add_events?
-        account_is_owner? || account_is_member?
+        can_write? && account_is_owner? || account_is_member?
       end
   
       def can_remove_events?
-        account_is_owner? || account_is_member?
+        can_write? && account_is_owner? || account_is_member?
       end
   
       def can_add_members?
-        account_is_owner?
+        can_write? && account_is_owner?
       end
   
       def can_remove_members?
-        account_is_owner?
+        can_write? && account_is_owner?
       end
   
       # not a owner or member
@@ -61,6 +62,14 @@ module Available
       end
   
       private
+
+      def can_read?
+        @auth_scope ? @auth_scope.can_read?('calendars') : false
+      end
+  
+      def can_write?
+        @auth_scope ? @auth_scope.can_write?('calendars') : false
+      end
   
       def account_is_owner?
         @calendar.owner == @account
