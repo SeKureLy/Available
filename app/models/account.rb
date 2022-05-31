@@ -7,15 +7,15 @@ require_relative './password'
 module Available
   # Models a registered accountvhjrfgyui
   class Account < Sequel::Model
-    one_to_many :owned_groups, class: :'Available::Group', key: :owner_id
     one_to_many :owned_calendars, class: :'Available::Calendar', key: :owner_id
+
     many_to_many :involvements,
-                 class: :'Available::Group',
-                 join_table: :accounts_groups,
-                 left_key: :member_id, right_key: :group_id
+                class: :'Available::Calendar',
+                join_table: :accounts_calendars,
+                left_key: :member_id, right_key: :calendar_id
 
     plugin :association_dependencies,
-           owned_groups: :destroy,
+           owned_calendars: :destroy,
            involvements: :nullify
 
     plugin :whitelist_security
@@ -23,9 +23,9 @@ module Available
 
     plugin :timestamps, update_on_create: true
 
-    # def projects
-    #   owned_projects + collaborations
-    # end
+    def calendars
+      owned_calendars + involvements
+    end
 
     def password=(new_password)
       self.password_digest = Password.digest(new_password)
@@ -39,10 +39,11 @@ module Available
     def to_json(options = {})
       JSON(
         { data: {
-          type: 'account',
-          attributes: {
-            id:, username:, email:
-          }
+            type: 'account',
+            attributes: {
+              username:, 
+              email:
+            }
         } }, options
       )
     end
