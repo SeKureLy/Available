@@ -94,7 +94,7 @@ describe 'Test Calendar Handling' do
 
     it 'HAPPY: should be able to create new calendars' do
       header 'AUTHORIZATION', @auth_header
-      post 'api/v1/calendars', @calendar_data.to_json, @req_header
+      post 'api/v1/calendars', @calendar_data.to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 

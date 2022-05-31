@@ -29,18 +29,15 @@ end
 
 def authorization(account_data)
   auth = authenticate(account_data)
-  puts auth[:attributes][:auth_token]
   # token = AuthToken.new(auth[:attributes][:auth_token])
   # puts token.payload
   # account = token.payload['attributes']
   # { account: Available::Account.first(username: account['username']),
   #   scope: AuthScope.new(token.scope) }
+  
 
-  token = AuthToken.new(auth[:attributes][:auth_token])
-  account_data = token.payload['data']['attributes']
-
-  { account: Account.first(username: account_data['username']),
-    scope: AuthScope.new(token.scope) }
+  { account: Available::Account.first(username: account_data['username']),
+    scope: AuthScope.new }
 end
 
 DATA = {

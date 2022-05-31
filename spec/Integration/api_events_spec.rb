@@ -39,7 +39,7 @@ describe 'Test event Handling' do
     event_data = DATA[:events][1]
     calendar = Available::Calendar.first
     event = Available::CreateEventForCalendar.call(
-        account:@account, cal_id: calendar.id, event_data:event_data
+      auth:@auth, cal_id: calendar.id, event_data:event_data
     )
 
     header 'AUTHORIZATION', @auth_header

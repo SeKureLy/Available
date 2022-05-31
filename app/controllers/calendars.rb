@@ -117,7 +117,7 @@ module Available
         routing.post do
           new_data = JSON.parse(routing.body.read)
           new_cal = CreateCalendarForOwner.call(
-            username: @auth_account, calendar_data:new_data
+            username: @auth_account.username, calendar_data:new_data
           )
 
           response.status = 201
