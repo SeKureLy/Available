@@ -3,7 +3,7 @@
 require_relative './app'
 
 module Available
-  # Web controller for Credence API
+  # Web controller for Available API
   class Api < Roda
     route('events') do |routing|
       unless @auth_account
@@ -19,7 +19,7 @@ module Available
 
         routing.get do
           event = GetEventQuery.call(
-            requestor: @account, event: @req_event
+            requestor: @account, event: @req_event, auth: @auth
           )
 
           { data: event }.to_json

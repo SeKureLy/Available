@@ -3,21 +3,21 @@
 module Available
     # Policy to determine if account can view a project
     class EventPolicy
-        def initialize(account, event)
+        def initialize(account, event, auth_scope = nil)
         @account = account
         @event = event
         end
     
         def can_view?
-        account_owns_calendar? || account_involve_in_calendar?
+          can_read? && (account_owns_calendar? || account_involve_in_calendar?)
         end
     
         def can_edit?
-        account_owns_calendar? || account_involve_in_calendar?
+          can_write? && (account_owns_calendar? || account_involve_in_calendar?)
         end
     
         def can_delete?
-        account_owns_calendar? || account_involve_in_calendar?
+          can_write? && (account_owns_calendar? || account_involve_in_calendar?)
         end
     
         def summary
@@ -29,6 +29,14 @@ module Available
         end
     
         private
+
+        def can_read?
+          @auth_scope ? @auth_scope.can_read?('events') : false
+        end
+    
+        def can_write?
+          @auth_scope ? @auth_scope.can_write?('events') : false
+        end
     
         def account_owns_calendar?
         @event.calendar.owner == @account

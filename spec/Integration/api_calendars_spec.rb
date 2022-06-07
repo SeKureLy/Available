@@ -12,10 +12,11 @@ describe 'Test Calendar Handling' do
 
     @req_header = { 'CONTENT_TYPE' => 'application/json' }
     account_data = DATA[:accounts][0]
-    credentials = { username: account_data['username'],
-                    password: account_data['password'] }
-    post 'api/v1/auth/authenticate', credentials.to_json, @req_header
-    @auth_token = JSON.parse(last_response.body)['attributes']['auth_token']
+    # credentials = { username: account_data['username'],
+    #                 password: account_data['password'] }
+    # post 'api/v1/auth/authenticate', credentials.to_json, @req_header
+    # @auth_token = JSON.parse(last_response.body)['attributes']['auth_token']
+    @auth_header = auth_header(account_data)
   end
 
   describe 'Getting calendars' do
@@ -54,7 +55,7 @@ describe 'Test Calendar Handling' do
       @account.add_owned_calendar(DATA[:calendars][1])
       id = Available::Calendar.first.id
 
-      header 'AUTHORIZATION', "Bearer #{@auth_token}"
+      header 'AUTHORIZATION', @auth_header
       get "/api/v1/calendars/#{id}"
       _(last_response.status).must_equal 200
 
@@ -67,7 +68,7 @@ describe 'Test Calendar Handling' do
     end
 
     it 'SAD: should return error if unknown calendar requested' do
-      header 'AUTHORIZATION', "Bearer #{@auth_token}"
+      header 'AUTHORIZATION', @auth_header
       get '/api/v1/calendars/foobar'
 
       _(last_response.status).must_equal 404
@@ -76,7 +77,7 @@ describe 'Test Calendar Handling' do
     it 'SECURITY: should prevent basic SQL injection targeting IDs' do
       Available::Calendar.create(title: 'New Calendar')
       Available::Calendar.create(title: 'Newer Calendar')
-      header 'AUTHORIZATION', "Bearer #{@auth_token}"
+      header 'AUTHORIZATION', @auth_header
       get 'api/v1/calendars/2%20or%20id%3E0'
 
       # deliberately not reporting error -- don't give attacker information
@@ -92,8 +93,8 @@ describe 'Test Calendar Handling' do
     end
 
     it 'HAPPY: should be able to create new calendars' do
-      header 'AUTHORIZATION', "Bearer #{@auth_token}"
-      post 'api/v1/calendars', @calendar_data.to_json, @req_header
+      header 'AUTHORIZATION', @auth_header
+      post 'api/v1/calendars', @calendar_data.to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
@@ -110,7 +111,7 @@ describe 'Test Calendar Handling' do
       bad_data = @calendar_data.clone
       bad_data['created_at'] = '1900-01-01'
 
-      header 'AUTHORIZATION', "Bearer #{@auth_token}"
+      header 'AUTHORIZATION', @auth_header
       post 'api/v1/calendars', bad_data.to_json, @req_header
 
       _(last_response.status).must_equal 400

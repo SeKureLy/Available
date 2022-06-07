@@ -17,10 +17,10 @@ module Available
       end
     end
 
-    def self.call(requestor:, event:)
+    def self.call(auth:, event:)
       raise NotFoundError unless event
 
-      policy = EventPolicy.new(requestor, event)
+      policy = EventPolicy.new(auth[:account], event, auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
       event

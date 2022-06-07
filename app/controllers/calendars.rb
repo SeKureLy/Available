@@ -9,7 +9,7 @@ module Available
     route('calendars') do |routing|
       unauthorized_message = { message: 'Unauthorized Request' }.to_json
       routing.halt(403, unauthorized_message) unless @auth_account
-      @account = Account.first(username: @auth_account)
+      @account = @auth_account
 
       @cal_route = "#{@api_root}/calendars"
       routing.on String do |cal_id|
@@ -21,7 +21,7 @@ module Available
           # GET api/v1/calendars/[cal_id]/events
           routing.get do
             calendar = GetCalendarQuery.call(
-              account: @account, calendar: @req_calendar
+              auth: @auth, calendar: @req_calendar
             )
             {data: (@req_calendar.events)}.to_json
           rescue StandardError
@@ -33,7 +33,7 @@ module Available
             new_data = JSON.parse(routing.body.read)
 
             new_event = CreateEventForCalendar.call(
-              account: @account, cal_id:, event_data: new_data
+              auth: @auth, cal_id:, event_data: new_data
             )
 
             response.status = 201
@@ -89,7 +89,7 @@ module Available
           # GET api/v1/calendars/[ID]
           routing.get do
             calendar = GetCalendarQuery.call(
-              account: @account, calendar: @req_calendar
+              auth: @auth, calendar: @req_calendar
             )
 
             { data: calendar }.to_json
@@ -117,7 +117,7 @@ module Available
         routing.post do
           new_data = JSON.parse(routing.body.read)
           new_cal = CreateCalendarForOwner.call(
-            username: @auth_account, calendar_data:new_data
+            username: @auth_account.username, calendar_data:new_data
           )
 
           response.status = 201
