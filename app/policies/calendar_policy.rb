@@ -15,7 +15,7 @@ module Available
   
       # duplication is ok!
       def can_edit?
-        can_write? && account_is_owner? || account_is_member?
+        can_write? && (account_is_owner? || account_is_member?)
       end
   
       def can_delete?
@@ -27,11 +27,11 @@ module Available
       end
   
       def can_add_events?
-        can_write? && account_is_owner? || account_is_member?
+        can_write? && (account_is_owner? || account_is_member?)
       end
   
       def can_remove_events?
-        can_write? && account_is_owner? || account_is_member?
+        can_write? && (account_is_owner? || account_is_member?)
       end
   
       def can_add_members?

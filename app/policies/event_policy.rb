@@ -6,6 +6,7 @@ module Available
         def initialize(account, event, auth_scope = nil)
         @account = account
         @event = event
+        @auth_scope = auth_scope
         end
     
         def can_view?

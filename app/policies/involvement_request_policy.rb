@@ -7,6 +7,7 @@ module Available
         @calendar = calendar
         @requestor_account = requestor_account
         @target_account = target_account
+        @auth_scope = auth_scope
         @requestor = CalendarPolicy.new(requestor_account, calendar, auth_scope)
         @target = CalendarPolicy.new(target_account, calendar, auth_scope)
       end
