@@ -8,6 +8,7 @@ module Available
   # Web controller for Available API
   class Api < Roda
     plugin :halt
+    plugin :all_verbs
     plugin :multi_route
     plugin :request_headers
 

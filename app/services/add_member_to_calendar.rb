@@ -9,8 +9,11 @@ module Available
     end
 
     def self.call(auth:,email:, title:)
+      puts email
       invitee = Account.first(email:)
+      puts invitee.username
       calendar = Calendar.first(title:)
+      puts calendar.title
       policy = InvolvementRequestPolicy.new(calendar, auth[:account], invitee, auth[:scope])
       raise(ForbiddenError) unless policy.can_invite?
 

@@ -53,9 +53,8 @@ module Available
           # PUT api/v1/calendars/[cal_id]/members
           routing.put do
             req_data = JSON.parse(routing.body.read)
-
             member = AddMemberToCalendar.call(
-              account: @auth_account,
+              auth: @auth,
               email: req_data['email'],
               title: req_data['title']
             )
@@ -71,7 +70,7 @@ module Available
           routing.delete do
             req_data = JSON.parse(routing.body.read)
             member = RemoveMember.call(
-              req_username: @auth_account.username,
+              auth: @auth,
               email: req_data['email'],
               calendar_id: cal_id
             )
