@@ -44,7 +44,7 @@ def create_calendar_members
       auth_token = AuthToken.create(calendar.owner)
       auth = scoped_auth(auth_token)
       Available::AddMemberToCalendar.call(
-        auth: auth ,email: member, title: calendar_info['cal_title']
+        auth: auth ,email: member, calendar: calendar
       )
     end
   end
