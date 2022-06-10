@@ -56,7 +56,7 @@ module Available
             member = AddMemberToCalendar.call(
               auth: @auth,
               email: req_data['email'],
-              title: req_data['title']
+              calendar: @req_calendar
             )
 
             { data: member }.to_json
@@ -75,7 +75,7 @@ module Available
               calendar_id: cal_id
             )
 
-            { message: "#{member.username} removed from projet",
+            { message: "#{member.username} removed from calendar",
               data: member }.to_json
           rescue RemoveMember::ForbiddenError => e
             routing.halt 403, { message: e.message }.to_json
