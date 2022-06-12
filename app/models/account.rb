@@ -23,6 +23,11 @@ module Available
 
     plugin :timestamps, update_on_create: true
 
+    def self.create_google_account(google_account)
+      create(username: google_account[:username],
+             email: google_account[:email])
+    end
+
     def calendars
       owned_calendars + involvements
     end
