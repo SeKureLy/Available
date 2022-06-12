@@ -47,6 +47,25 @@ module Available
             Api.logger.warn "MASS-ASSIGNMENT: #{e.message}"
             routing.halt 500, { message: 'Error creating event' }.to_json
           end
+
+          # DELETE api/v1/calendars/[cal_id]/events
+          routing.delete do
+            param = JSON.parse(routing.body.read)
+
+            new_event = RemoveEventForCalendar.call(
+              auth: @auth, cal_id:, event_id: param['event_id']
+            )
+
+            response.status = 201
+            { message: 'Event deleted' }.to_json
+
+          rescue Sequel::MassAssignmentRestriction
+            Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+            routing.halt 400, { message: 'Illegal Attributes' }.to_json
+          rescue StandardError => e
+            Api.logger.warn "MASS-ASSIGNMENT: #{e.message}"
+            routing.halt 500, { message: 'Error deleting event' }.to_json
+          end
         end
 
         routing.on('members') do
