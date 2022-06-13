@@ -44,6 +44,28 @@ module Available
       )
     end
 
+    def full_events
+      parse_events = events.map{ |event|
+        { data: {
+          type: 'event',
+          attributes: {
+            id:event.id, 
+            title:nil, 
+            start_time:event.start_time, 
+            end_time:event.end_time, 
+            description:nil
+          }
+        }}
+      }
+      to_h.merge(
+        relationships: {
+          owner: nil,
+          members: nil,
+          events: parse_events
+        }
+      )
+    end
+
     def to_json(options = {})
       JSON(to_h, options)
     end

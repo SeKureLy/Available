@@ -23,7 +23,8 @@ module Available
       policy = CalendarPolicy.new(auth[:account], calendar, auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
-      calendar.full_details.merge(policies: policy.summary)
+      return calendar.full_details.merge(policies: policy.summary) if policy.can_edit?
+      return calendar.full_events.merge(policies: {}) if policy.can_view?
     end
   end
 end
