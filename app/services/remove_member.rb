@@ -10,12 +10,10 @@ module Available
         end
       end
   
-      def self.call(req_username:, email:, calendar_id:)
-        account = Account.first(username: req_username)
+      def self.call(auth:, email:, calendar_id:)
         calendar = Calendar.first(id: calendar_id)
         member = Account.first(email:)
-  
-        policy = InvolvementRequestPolicy.new(calendar, account, member)
+        policy = InvolvementRequestPolicy.new(calendar, auth[:account], member, auth[:scope])
         raise ForbiddenError unless policy.can_remove?
   
         calendar.remove_member(member)

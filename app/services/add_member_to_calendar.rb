@@ -8,10 +8,13 @@ module Available
       def message = 'Owner cannot be member of project'
     end
 
-    def self.call(account:,email:, title:)
+    def self.call(auth:, email:, calendar:)
+      puts email
       invitee = Account.first(email:)
-      calendar = Calendar.first(title:)
-      policy = InvolvementRequestPolicy.new(calendar, account, invitee)
+      puts invitee.username
+      # calendar = Calendar.first(title:)
+      puts calendar.title
+      policy = InvolvementRequestPolicy.new(calendar, auth[:account], invitee, auth[:scope])
       raise(ForbiddenError) unless policy.can_invite?
 
       calendar.add_member(invitee)

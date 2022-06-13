@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require './app/controllers/helpers.rb'
+include Available::SecureRequestHelpers
 
 Sequel.seed(:development) do
   def run
@@ -39,8 +41,10 @@ def create_calendar_members
   CAL_MEMBER_INFO.each do |calendar_info|
     calendar = Available::Calendar.first(title: calendar_info['cal_title'])
     calendar_info['member_email'].each do |member|
+      auth_token = AuthToken.create(calendar.owner)
+      auth = scoped_auth(auth_token)
       Available::AddMemberToCalendar.call(
-        account: calendar.owner,email: member, title: calendar_info['cal_title']
+        auth: auth ,email: member, calendar: calendar
       )
     end
   end
@@ -52,8 +56,12 @@ def create_events
   loop do
     event_info = event_info_each.next
     calendar = calendars_cycle.next
+
+    auth_token = AuthToken.create(calendar.owner)
+    auth = scoped_auth(auth_token)
+
     Available::CreateEventForCalendar.call(
-      account: calendar.owner, cal_id: calendar.id, event_data: event_info
+      auth: auth, cal_id: calendar.id, event_data: event_info
     )
   end
 end
