@@ -23,7 +23,7 @@ module Available
       raise unless g_response.status == 200
 
       account = GoogleAccount.new(JSON.parse(g_response))
-      { username: account.email.sub("@gmail.com", ""), email: account.email }
+      { username: account.username, email: account.email }
     end
 
     def find_or_create_sso_account(account_data)

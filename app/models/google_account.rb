@@ -8,7 +8,7 @@ module Available
       end
   
       def username
-        @g_account['login'] + '@google'
+        @g_account['email'].sub("@gmail.com", "@google")
       end
   
       def email
