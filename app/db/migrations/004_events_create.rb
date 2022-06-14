@@ -9,8 +9,8 @@ Sequel.migration do
       foreign_key :calendar_id, table: :calendars
 
       String :title_secure
-      Integer :start_time
-      Integer :end_time
+      String :start_time
+      String :end_time
       String :description_secure
 
       DateTime :created_at
