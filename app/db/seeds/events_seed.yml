@@ -1,10 +1,10 @@
 ---
 - title: "6/15 midterm meeting"
-  start_time: 1654933560000
-  end_time: 1654962720000
+  start_time: "1654933560000"
+  end_time: "1654962720000"
   description: 'all SEC attends'
 - title: "7/31 final meeting"
-  start_time: 1654933560000
-  end_time: 1654962720000
+  start_time: "1654933560000"
+  end_time: "1654962720000"
   description: 'all Logos Lab attends'
   
