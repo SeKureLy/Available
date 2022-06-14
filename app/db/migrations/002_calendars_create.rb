@@ -9,6 +9,8 @@ Sequel.migration do
       foreign_key :owner_id, table: :accounts
 
       String :title, null: false
+      Integer :type, default: 0
+      String :guesturl, text: true
 
       DateTime :created_at
       DateTime :updated_at
