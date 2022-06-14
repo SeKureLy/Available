@@ -20,7 +20,7 @@ module Available
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title
+    set_allowed_columns :title, :type, :guesturl
 
     def to_h
       {
@@ -29,6 +29,8 @@ module Available
           attributes: {
             id:,
             title:,
+            type:,
+            guesturl:
           }
         }
       }
