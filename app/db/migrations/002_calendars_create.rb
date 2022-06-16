@@ -10,7 +10,7 @@ Sequel.migration do
 
       String :title, null: false
       Integer :type, default: 0
-      String :guesturl, text: true
+      String :guesturl_secure, text: true
 
       DateTime :created_at
       DateTime :updated_at

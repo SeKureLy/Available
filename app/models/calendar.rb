@@ -22,6 +22,15 @@ module Available
     plugin :whitelist_security
     set_allowed_columns :title, :type, :guesturl
 
+    # Secure getters and setters
+    def guesturl
+      SecureDB.decrypt(guesturl_secure)
+    end
+
+    def guesturl=(plaintext)
+      self.guesturl_secure = SecureDB.encrypt(plaintext)
+    end
+    
     def to_h
       {
         data: {
