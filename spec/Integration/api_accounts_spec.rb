@@ -38,9 +38,11 @@ describe 'Test Account Handling' do
     end
 
     it 'HAPPY: should be able to create new accounts' do
-      post 'api/v1/accounts', @account_data.to_json, @req_header
+      post 'api/v1/accounts',
+        SignedRequest.new(app.config).sign(@account_data).to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
+
       created = JSON.parse(last_response.body)['data']['data']['attributes']
       account = Available::Account.first
 
@@ -53,7 +55,8 @@ describe 'Test Account Handling' do
     it 'BAD: should not create account with illegal attributes' do
       bad_data = @account_data.clone
       bad_data['created_at'] = '1900-01-01'
-      post 'api/v1/accounts', bad_data.to_json, @req_header
+      post 'api/v1/accounts',
+        SignedRequest.new(app.config).sign(bad_data).to_json
 
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil
