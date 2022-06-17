@@ -14,20 +14,20 @@ describe 'Test Account Handling' do
     it 'HAPPY: should be able to get details of a single account' do
       account_data = DATA[:accounts][1]
       account = Available::Account.create(account_data)
-      # credentials = { username: account_data['username'],
-      #                 password: account_data['password'] }
-      # post 'api/v1/auth/authenticate', credentials.to_json, @req_header
-      # auth_token = JSON.parse(last_response.body)['attributes']['auth_token']
+
+      # puts "Auth header = #{auth_header(account_data)}"
       header 'AUTHORIZATION', auth_header(account_data)
       get "/api/v1/accounts/#{account.username}"
       _(last_response.status).must_equal 200
-      # puts JSON.parse(last_response.body)
-      result = JSON.parse(last_response.body)['data']['attributes']["account"]['data']['attributes']
 
-      _(result['username']).must_equal account.username
-      _(result['salt']).must_be_nil
-      _(result['password']).must_be_nil
-      _(result['password_hash']).must_be_nil
+      result = JSON.parse(last_response.body)['data']['attributes']
+      account_data = result['account']['data']['attributes']
+
+      _(account_data['username']).must_equal account.username
+      _(account_data['salt']).must_be_nil
+      _(account_data['password']).must_be_nil
+      _(account_data['password_hash']).must_be_nil
+      _(result['auth_token']).wont_be_nil
     end
   end
 
