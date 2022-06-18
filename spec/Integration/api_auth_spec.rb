@@ -30,10 +30,12 @@ describe 'Test Authentication Routes' do
     end
 
     it 'BAD: should not authenticate invalid password' do
-      credentials = { username: @account_data['username'],
+      bad_credentials = { username: @account_data['username'],
                       password: 'fakepassword' }
 
-      post 'api/v1/auth/authenticate', credentials.to_json, @req_header
+      post 'api/v1/auth/authenticate',
+        SignedRequest.new(app.config).sign(bad_credentials).to_json,
+        @req_header
 
       result = JSON.parse(last_response.body)
 
