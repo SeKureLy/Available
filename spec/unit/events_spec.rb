@@ -17,11 +17,10 @@ describe 'Test Event Handling' do
     new_event = calender.add_event(event_data)
 
     event = Available::Event.find(id: new_event.id)
-    # _(event.title).must_equal event_data['title']
+    _(event.title).must_equal event_data['title']
     _(event.start_time).must_equal event_data['start_time']
     _(event.end_time).must_equal event_data['end_time']
-    # _(event.description).must_equal event_data['description']
-    # _(event.share_id).must_equal event_data['share_id']
+    _(event.description).must_equal event_data['description']
   end
 
   it 'SECURITY: should not use deterministic integers' do
