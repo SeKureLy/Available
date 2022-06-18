@@ -3,3 +3,5 @@ app/db/store/*.db
 config/secrets.yml
 .bundle/
 .irb_history
+coverage/*
+!coverage/.resultset.json
