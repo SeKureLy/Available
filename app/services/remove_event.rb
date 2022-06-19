@@ -5,7 +5,7 @@ module Available
   class RemoveEventForCalendar
     class ForbiddenError < StandardError
       def message
-        'You are not allowed to add more events'
+        'You are not allowed to remove the event'
       end
     end
     def self.call(auth:, cal_id:, event_id:)

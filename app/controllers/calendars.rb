@@ -33,19 +33,22 @@ module Available
             new_data = JSON.parse(routing.body.read)
 
             new_event = CreateEventForCalendar.call(
-              auth: @auth, cal_id:, event_data: new_data
+              auth: @auth,
+              cal_id:,
+              event_data: new_data
             )
 
             response.status = 201
             response['Location'] = "#{@event_route}/#{new_event.id}"
             { message: 'Event saved', data: new_event }.to_json
-
-          rescue Sequel::MassAssignmentRestriction
-            Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
-            routing.halt 400, { message: 'Illegal Attributes' }.to_json
+          
+          rescue CreateEventForCalendar::ForbiddenError => e
+            routing.halt 403, { message: e.message }.to_json
+          rescue CreateEventForCalendar::IllegalRequestError => e
+            routing.halt 400, { message: e.message }.to_json
           rescue StandardError => e
-            Api.logger.warn "MASS-ASSIGNMENT: #{e.message}"
-            routing.halt 500, { message: 'Error creating event' }.to_json
+            Api.logger.warn "Could not create event: #{e.message}"
+            routing.halt 500, { message: 'API server error' }.to_json
           end
 
           # DELETE api/v1/calendars/[cal_id]/events

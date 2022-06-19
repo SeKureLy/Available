@@ -2,80 +2,85 @@
 
 require_relative '../spec_helper'
 
-describe 'Test event Handling' do
+describe 'Test Event Handling' do
   include Rack::Test::Methods
 
   before do
     wipe_database
-    @req_header = { 'CONTENT_TYPE' => 'application/json' }
-    account_data = DATA[:accounts][1]
-    @account = Available::Account.create(account_data)
+    
+    @account_data = DATA[:accounts][0]
+    @wrong_account_data = DATA[:accounts][1]
+
+    @account = Available::Account.create(@account_data)
     @account.add_owned_calendar(DATA[:calendars][0])
-    # credentials = { username: account_data['username'],
-    #                 password: account_data['password'] }
-    # post 'api/v1/auth/authenticate', credentials.to_json, @req_header
-    # @auth_token = JSON.parse(last_response.body)['attributes']['auth_token']
-    @auth_header = auth_header(account_data)
-    @auth = authorization(account_data)
+    Available::Account.create(@wrong_account_data)
+    
+    header 'CONTENT_TYPE', 'application/json'
   end
 
-  it 'HAPPY: should be able to get list of all events' do
-    calendar = Available::Calendar.first
-    DATA[:events].each do |event|
-      Available::CreateEventForCalendar.call(
-        auth:@auth, cal_id: calendar.id, event_data:event
-      )
+  describe 'Getting a single event' do
+    it 'HAPPY: should be able to get details of a single event' do
+      event_data = DATA[:events][0]
+      calendar = @account.calendars.first
+      event = calendar.add_event(event_data)
+
+      header 'AUTHORIZATION', auth_header(@account_data)
+      get "/api/v1/events/#{event.id}"
+      _(last_response.status).must_equal 200
+
+      result = JSON.parse(last_response.body)['data']['data']
+
+      _(result['attributes']['id']).must_equal event.id
+      _(result['attributes']['title']).must_equal event_data['title']
+      _(result['attributes']['start_time']).must_equal event_data['start_time']
+      _(result['attributes']['end_time']).must_equal event_data['end_time']
+      _(result['attributes']['description']).must_equal event_data['description']
     end
 
-    header 'AUTHORIZATION', @auth_header
-    get "api/v1/calendars/#{calendar.id}/events"
-    _(last_response.status).must_equal 200
+    it 'SAD AUTHORIZATION: should not get details without authorization' do
+      event_data = DATA[:events][1]
+      calendar = Available::Calendar.first
+      event = calendar.add_event(event_data)
 
-    result = JSON.parse last_response.body
-    _(result['data'].count).must_equal 2
+      get "/api/v1/events/#{event.id}"
+
+      result = JSON.parse last_response.body
+      
+      _(last_response.status).must_equal 403
+      _(result['attributes']).must_be_nil
+    end
+
+    it 'BAD AUTHORIZATION: should not get details with wrong authorization' do
+      event_data = DATA[:events][0]
+      calendar = @account.calendars.first
+      event = calendar.add_event(event_data)
+
+      header 'AUTHORIZATION', auth_header(@wrong_account_data)
+      get "/api/v1/events/#{event.id}"
+
+      result = JSON.parse last_response.body
+
+      _(last_response.status).must_equal 403
+      _(result['attributes']).must_be_nil
+    end
+
+    it 'SAD: should return error if event does not exist' do
+      header 'AUTHORIZATION', auth_header(@account_data)
+      get '/api/v1/events/foobar'
+
+      _(last_response.status).must_equal 404
+    end
   end
 
-  it 'HAPPY: should be able to get details of a single event' do
-    event_data = DATA[:events][1]
-    calendar = Available::Calendar.first
-    event = Available::CreateEventForCalendar.call(
-      auth:@auth, cal_id: calendar.id, event_data:event_data
-    )
-
-    header 'AUTHORIZATION', @auth_header
-    get "/api/v1/calendars/#{calendar.id}/events/#{event.id}"
-    _(last_response.status).must_equal 200
-
-    result = JSON.parse last_response.body
-    result = result['data'][0]
-
-    _(result['data']['attributes']['id']).must_equal event.id
-    _(result['data']['attributes']['title']).must_equal event_data['title']
-    _(result['data']['attributes']['start_time']).must_equal event_data['start_time']
-    _(result['data']['attributes']['end_time']).must_equal event_data['end_time']
-  end
-
-  it 'SAD: should return error if unknown event requested' do
-    calendar = Available::Calendar.first
-
-    header 'AUTHORIZATION', @auth_header
-    get "/api/v1/calendars/events/foobar"
-
-    _(last_response.status).must_equal 404
-  end
-
-  describe 'Creating Documents' do
+  describe 'Creating Events' do
     before do
       @calendar = Available::Calendar.first
       @event_data = DATA[:events][1]
-      @req_header = { 'CONTENT_TYPE' => 'application/json' }
     end
 
-    it 'HAPPY: should be able to create new events' do
-      header 'AUTHORIZATION', @auth_header
-      post "api/v1/calendars/#{@calendar.id}/events",
-           @event_data.to_json, @req_header
-
+    it 'HAPPY: should be able to create when everything correct' do
+      header 'AUTHORIZATION', auth_header(@account_data)
+      post "api/v1/calendars/#{@calendar.id}/events", @event_data.to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
@@ -84,21 +89,32 @@ describe 'Test event Handling' do
 
       _(created['id']).must_equal event.id
       _(created['title']).must_equal @event_data['title']
-      _(created['description']).must_equal @event_data['description']
       _(created['start_time']).must_equal @event_data['start_time']
       _(created['end_time']).must_equal @event_data['end_time']
+      _(created['description']).must_equal @event_data['description']
     end
 
-    it 'SECURITY: should not create documents with mass assignment' do
+    it 'BAD AUTHORIZATION: should not create with incorrect authorization' do
+      header 'AUTHORIZATION', auth_header(@wrong_account_data)
+      post "api/v1/calendars/#{@calendar.id}/events", @event_data.to_json
+
+      data = JSON.parse(last_response.body)['data']
+
+      _(last_response.status).must_equal 403
+      _(last_response.header['Location']).must_be_nil
+      _(data).must_be_nil
+    end
+
+    it 'BAD VULNERABILITY: should not create with mass assignment' do
       bad_data = @event_data.clone
       bad_data['created_at'] = '1900-01-01'
+      header 'AUTHORIZATION', auth_header(@account_data)
+      post "api/v1/calendars/#{@calendar.id}/events", bad_data.to_json
 
-      header 'AUTHORIZATION', @auth_header
-      post "api/v1/calendars/#{@calendar.id}/events",
-           bad_data.to_json, @req_header
-
+      data = JSON.parse(last_response.body)['data']
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil
+      _(data).must_be_nil
     end
   end
 end

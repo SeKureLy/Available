@@ -19,8 +19,10 @@ describe 'Test Authentication Routes' do
     it 'HAPPY: should authenticate valid credentials' do
       credentials = { username: @account_data['username'],
                       password: @account_data['password'] }
-      post 'api/v1/auth/authenticate', credentials.to_json, @req_header
-
+      post 'api/v1/auth/authenticate',
+          SignedRequest.new(app.config).sign(credentials).to_json,
+          @req_header
+        
       auth_account = JSON.parse(last_response.body)['attributes']['account']['data']['attributes']
       _(last_response.status).must_equal 200
       _(auth_account['username']).must_equal(@account_data['username'])
@@ -28,10 +30,12 @@ describe 'Test Authentication Routes' do
     end
 
     it 'BAD: should not authenticate invalid password' do
-      credentials = { username: @account_data['username'],
+      bad_credentials = { username: @account_data['username'],
                       password: 'fakepassword' }
 
-      post 'api/v1/auth/authenticate', credentials.to_json, @req_header
+      post 'api/v1/auth/authenticate',
+        SignedRequest.new(app.config).sign(bad_credentials).to_json,
+        @req_header
 
       result = JSON.parse(last_response.body)
 

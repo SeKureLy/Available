@@ -33,6 +33,9 @@ group :test do
   gem 'minitest-rg'
 end
 
+# Test coverage
+gem 'simplecov'
+
 # Debugging
 gem 'pry' # necessary for rake console
 gem 'rack-test'
