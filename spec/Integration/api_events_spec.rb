@@ -7,14 +7,14 @@ describe 'Test Event Handling' do
 
   before do
     wipe_database
-    
+
     @account_data = DATA[:accounts][0]
     @wrong_account_data = DATA[:accounts][1]
 
     @account = Available::Account.create(@account_data)
     @account.add_owned_calendar(DATA[:calendars][0])
     Available::Account.create(@wrong_account_data)
-    
+
     header 'CONTENT_TYPE', 'application/json'
   end
 
@@ -45,7 +45,7 @@ describe 'Test Event Handling' do
       get "/api/v1/events/#{event.id}"
 
       result = JSON.parse last_response.body
-      
+
       _(last_response.status).must_equal 403
       _(result['attributes']).must_be_nil
     end

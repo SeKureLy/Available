@@ -37,7 +37,6 @@ def authorization(account_data)
   # account = token.payload['attributes']
   # { account: Available::Account.first(username: account['username']),
   #   scope: AuthScope.new(token.scope) }
-  
 
   { account: Available::Account.first(username: account_data['username']),
     scope: AuthScope.new }

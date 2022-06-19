@@ -23,7 +23,7 @@ module Available
             calendar = GetCalendarQuery.call(
               auth: @auth, calendar: @req_calendar
             )
-            {data: (@req_calendar.events)}.to_json
+            { data: @req_calendar.events }.to_json
           rescue StandardError
             routing.halt 404, { message: 'Could not find events' }.to_json
           end
@@ -41,7 +41,7 @@ module Available
             response.status = 201
             response['Location'] = "#{@event_route}/#{new_event.id}"
             { message: 'Event saved', data: new_event }.to_json
-          
+
           rescue CreateEventForCalendar::ForbiddenError => e
             routing.halt 403, { message: e.message }.to_json
           rescue CreateEventForCalendar::IllegalRequestError => e
@@ -138,7 +138,7 @@ module Available
         routing.post do
           new_data = JSON.parse(routing.body.read)
           new_cal = CreateCalendarForOwner.call(
-            username: @auth_account.username, calendar_data:new_data
+            username: @auth_account.username, calendar_data: new_data
           )
 
           response.status = 201

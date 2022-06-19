@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require './app/controllers/helpers.rb'
+
+require './app/controllers/helpers'
 include Available::SecureRequestHelpers
 
 Sequel.seed(:development) do
@@ -44,7 +45,7 @@ def create_calendar_members
       auth_token = AuthToken.create(calendar.owner)
       auth = scoped_auth(auth_token)
       Available::AddMemberToCalendar.call(
-        auth: auth ,email: member, calendar: calendar
+        auth:, email: member, calendar:
       )
     end
   end
@@ -61,7 +62,7 @@ def create_events
     auth = scoped_auth(auth_token)
 
     Available::CreateEventForCalendar.call(
-      auth: auth, cal_id: calendar.id, event_data: event_info
+      auth:, cal_id: calendar.id, event_data: event_info
     )
   end
 end

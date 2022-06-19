@@ -43,12 +43,12 @@ module Available
       end
 
       # POST /api/v1/auth/sso
-      routing.post 'sso' do        
+      routing.post 'sso' do
         auth_account = AuthorizeSso.new.call(@request_data[:access_token])
         { data: auth_account }.to_json
-      rescue StandardError => error
-        puts "FAILED to validate Google account: #{error.inspect}"
-        puts error.backtrace
+      rescue StandardError => e
+        puts "FAILED to validate Google account: #{e.inspect}"
+        puts e.backtrace
         routing.halt 400
       end
     end

@@ -14,10 +14,10 @@ module Available
         routing.halt(403, UNAUTH_MSG) unless @auth_account
         routing.get do
           auth = AuthorizeAccount.call(
-            auth: @auth, username: username,
+            auth: @auth, username:,
             auth_scope: AuthScope.new(AuthScope::READ_ONLY)
           )
-          {data: auth}.to_json
+          { data: auth }.to_json
         rescue AuthorizeAccount::ForbiddenError => e
           routing.halt 404, { message: e.message }.to_json
         rescue StandardError => e

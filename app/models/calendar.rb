@@ -10,9 +10,9 @@ module Available
     many_to_one :owner, class: :'Available::Account'
 
     many_to_many :members,
-    class: :'Available::Account',
-    join_table: :accounts_calendars,
-    left_key: :calendar_id, right_key: :member_id
+                 class: :'Available::Account',
+                 join_table: :accounts_calendars,
+                 left_key: :calendar_id, right_key: :member_id
 
     plugin :association_dependencies,
            events: :destroy,
@@ -30,7 +30,7 @@ module Available
     def guesturl=(plaintext)
       self.guesturl_secure = SecureDB.encrypt(plaintext)
     end
-    
+
     def to_h
       {
         data: {
@@ -56,18 +56,18 @@ module Available
     end
 
     def full_events
-      parse_events = events.map{ |event|
+      parse_events = events.map do |event|
         { data: {
           type: 'event',
           attributes: {
-            id:event.id, 
-            title:nil, 
-            start_time:event.start_time, 
-            end_time:event.end_time, 
-            description:nil
+            id: event.id,
+            title: nil,
+            start_time: event.start_time,
+            end_time: event.end_time,
+            description: nil
           }
-        }}
-      }
+        } }
+      end
       to_h.merge(
         relationships: {
           owner: nil,

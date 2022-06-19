@@ -10,9 +10,9 @@ module Available
     one_to_many :owned_calendars, class: :'Available::Calendar', key: :owner_id
 
     many_to_many :involvements,
-                class: :'Available::Calendar',
-                join_table: :accounts_calendars,
-                left_key: :member_id, right_key: :calendar_id
+                 class: :'Available::Calendar',
+                 join_table: :accounts_calendars,
+                 left_key: :member_id, right_key: :calendar_id
 
     plugin :association_dependencies,
            owned_calendars: :destroy,
@@ -44,11 +44,11 @@ module Available
     def to_json(options = {})
       JSON(
         { data: {
-            type: 'account',
-            attributes: {
-              username:, 
-              email:
-            }
+          type: 'account',
+          attributes: {
+            username:,
+            email:
+          }
         } }, options
       )
     end

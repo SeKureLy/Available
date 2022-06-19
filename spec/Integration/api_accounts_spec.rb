@@ -38,7 +38,7 @@ describe 'Test Account Handling' do
 
     it 'HAPPY: should be able to create new accounts' do
       post 'api/v1/accounts',
-        SignedRequest.new(app.config).sign(@account_data).to_json
+           SignedRequest.new(app.config).sign(@account_data).to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
@@ -55,7 +55,7 @@ describe 'Test Account Handling' do
       bad_data = @account_data.clone
       bad_data['created_at'] = '1900-01-01'
       post 'api/v1/accounts',
-        SignedRequest.new(app.config).sign(bad_data).to_json
+           SignedRequest.new(app.config).sign(bad_data).to_json
 
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil

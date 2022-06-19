@@ -22,7 +22,7 @@ describe 'Test Add Member service' do
     auth = authorization(@owner_data)
 
     Available::AddMemberToCalendar.call(
-      auth: auth,
+      auth:,
       email: @member.email,
       calendar: @calendar
     )
@@ -39,7 +39,7 @@ describe 'Test Add Member service' do
 
     _(proc {
       Available::AddMemberToCalendar.call(
-        auth: auth,
+        auth:,
         email: @member.email,
         calendar: @calendar
       )

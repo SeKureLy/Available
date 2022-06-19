@@ -18,7 +18,7 @@ module Available
         # user_agent: 'Available',
         authorization: "Bearer #{access_token}",
         accept: 'application/json'
-      ).get(ENV['GOOGLE_ACCOUNT_URL'])
+      ).get(ENV.fetch('GOOGLE_ACCOUNT_URL', nil))
 
       raise unless g_response.status == 200
 
@@ -35,7 +35,7 @@ module Available
       {
         type: 'sso_account',
         attributes: {
-          account: account,
+          account:,
           auth_token: AuthToken.create(account)
         }
       }

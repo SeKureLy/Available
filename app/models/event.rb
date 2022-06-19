@@ -34,19 +34,18 @@ module Available
     def to_json(options = {})
       JSON(
         { data: {
-            type: 'event',
-            attributes: {
-              id:, 
-              title:, 
-              start_time:, 
-              end_time:, 
-              description:
-            }
-          }, 
+          type: 'event',
+          attributes: {
+            id:,
+            title:,
+            start_time:,
+            end_time:,
+            description:
+          }
+        },
           included: {
             calendar:
-          } 
-        }, options
+          } }, options
       )
     end
     # rubocop:enable Metrics/MethodLength
